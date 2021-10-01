@@ -1,0 +1,104 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE properties SYSTEM
+"http://java.sun.com/dtd/properties.dtd">
+<properties>
+	<entry key = "selectList">
+	SELECT 
+		USER_NO
+		,USER_NAME
+		,ID
+		,PASSWORD
+		,GENDER
+		,NICKNAME
+		,ADDRESS
+		,SIGN_DATE
+		,MODIFY_DATE
+		,AUTHORITY
+		,STATUS
+		,PHONE
+	FROM MEMBER
+	WHERE STATUS = 'Y'
+	ORDER BY USER_NO ASC
+	</entry>
+	
+	<entry key = "increaseCount">
+	UPDATE MEMBER
+	SET COUNT = COUNT+1
+	WHERE USER_NO = ?
+	AND STATUS = 'Y'
+	</entry>
+	
+	<entry key = "selectMember">
+	SELECT 
+		USER_NO
+		,USER_NAME
+		,ID
+		,PASSWORD
+		,GENDER
+		,NICKNAME
+		,ADDRESS
+		,SIGN_DATE
+		,MODIFY_DATE
+		,AUTHORITY
+		,STATUS
+		,PHONE
+	FROM MEMBER
+	WHERE USER_NO = ? 
+	AND STATUS = 'Y'
+	
+	</entry>
+	
+	<entry key = "updateMemberAuthority">
+	UPDATE MEMBER
+	SET AUTHORITY = ?
+	WHERE USER_NO = ?
+	AND STATUS = 'Y'
+	</entry>
+	
+	<entry key = "selectUserNameList">
+	SELECT 
+		USER_NO
+		,USER_NAME
+		,ID
+		,PASSWORD
+		,GENDER
+		,NICKNAME
+		,ADDRESS
+		,SIGN_DATE
+		,MODIFY_DATE
+		,AUTHORITY
+		,STATUS
+		,PHONE
+	FROM MEMBER
+	WHERE USER_NAME LIKE '%' || ? || '%'
+	AND STATUS = 'Y'
+	</entry>
+	
+	<entry key = "selectIdList">
+	SELECT 
+		USER_NO
+		,USER_NAME
+		,ID
+		,PASSWORD
+		,GENDER
+		,NICKNAME
+		,ADDRESS
+		,SIGN_DATE
+		,MODIFY_DATE
+		,AUTHORITY
+		,STATUS
+		,PHONE
+	FROM MEMBER
+	WHERE ID LIKE '%' || ? || '%'
+	AND STATUS = 'Y'
+	</entry>
+	
+	<entry key = "deleteMember">
+	UPDATE MEMBER
+	SET STATUS = 'N'
+	WHERE USER_NO = ?
+	
+	</entry>
+	
+	
+</properties>

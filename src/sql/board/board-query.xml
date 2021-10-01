@@ -1,0 +1,428 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE properties SYSTEM "http://java.sun.com/dtd/properties.dtd">
+<properties>
+	<entry key="getSearchReviewCount">
+		SELECT COUNT(*)
+		  FROM BOARD
+		 WHERE B_ID = ?
+		   AND STATUS = 'Y'
+		   AND (B_TITLE LIKE '%' || ? || '%'
+		    OR B_CONTENT LIKE '%' || ? || '%')
+	</entry>
+	<entry key="getSearchListCount">
+		SELECT COUNT(*)
+		  FROM BOARD
+		 WHERE B_ID BETWEEN ? AND ?
+		   AND STATUS = 'Y'
+		   AND (B_TITLE LIKE '%' || ? || '%'
+		    OR B_CONTENT LIKE '%' || ? || '%')
+	</entry>
+	<entry key="selectSearchList">
+		SELECT
+		        B_NO
+		      , B_ID
+		      , NICKNAME
+		      , B_TITLE
+		      , B_CREATE_DATE
+		      , B_COUNT
+		  FROM (SELECT
+		                   ROWNUM RNUM
+		                 , BLIST.*
+		           FROM (SELECT
+		                               *
+		                       FROM BOARD B
+		                       JOIN BOARD_TYPE USING(B_ID)
+		                       JOIN MEMBER USING(USER_NO)
+		                       WHERE B_ID BETWEEN ? AND ?
+		                          AND B.STATUS = 'Y'
+		                          AND B_TITLE LIKE '%' || ? || '%'
+		    					   OR B_CONTENT LIKE '%' || ? || '%'
+		                       ORDER BY B_NO DESC) BLIST)
+		 WHERE RNUM BETWEEN ? AND ?	
+	</entry>
+	<entry key="selectSearchReviewList">
+		SELECT
+		        B_NO
+		      , B_ID
+		      , NICKNAME
+		      , B_TITLE
+		      , B_CREATE_DATE
+		      , B_COUNT
+		  FROM (SELECT
+		                   ROWNUM RNUM
+		                 , BLIST.*
+		           FROM (SELECT
+		                               *
+		                       FROM BOARD B
+		                       JOIN BOARD_TYPE USING(B_ID)
+		                       JOIN MEMBER USING(USER_NO)
+		                       WHERE B_ID = ?
+		                          AND B.STATUS = 'Y'
+		                          AND (B_TITLE LIKE '%' || ? || '%'
+		    					   OR B_CONTENT LIKE '%' || ? || '%')
+		                       ORDER BY B_NO DESC) BLIST)
+		 WHERE RNUM BETWEEN ? AND ?	
+	</entry>
+	<entry key="selectList">
+		SELECT
+		            B_NO
+		          , B_ID
+		          , NICKNAME
+		          , B_TITLE
+		          , B_CREATE_DATE
+		          , B_COUNT
+		    FROM (SELECT
+	                        ROWNUM RNUM
+	                      , BLIST.*
+	                FROM (SELECT
+	                                    *
+	                            FROM BOARD B
+	                            JOIN BOARD_TYPE USING(B_ID)
+	                            JOIN MEMBER USING(USER_NO)
+	                            WHERE B_ID BETWEEN ? AND ?
+	                               AND B.STATUS = 'Y'
+	                            ORDER BY B_NO DESC) BLIST)
+		    WHERE RNUM BETWEEN ? AND ?
+	</entry>
+	<entry key="boardListCount">
+		SELECT 
+				COUNT(*)
+		  FROM BOARD
+		 WHERE B_ID BETWEEN ? AND ?
+		   AND STATUS = 'Y'
+	</entry>
+	<entry key="selectBoard">
+		SELECT
+				B_NO
+			  , B_ID
+			  , B_TYPE
+			  , USER_NO
+			  , NICKNAME
+			  , B_TITLE
+			  , B_DATE
+			  , B_CONTENT
+			  , B_CREATE_DATE
+			  , B_MODIFY_DATE
+			  , B_COUNT
+			  , B_TAG
+			  , IMAGE_NO
+			  , ROUTE
+			  ,	IMAGE_NAME
+			  , IMAGE_R_NAME
+		  FROM BOARD
+		  JOIN BOARD_TYPE USING(B_ID)
+		  LEFT JOIN MEMBER USING(USER_NO)
+		  LEFT JOIN BOARD_IMAGE USING(B_NO)
+		  LEFT JOIN IMAGE ON (ATTACHED_NO = IMAGE_NO)
+		 WHERE B_NO = ?
+		   AND (I_STATUS = 'Y' OR I_STATUS IS NULL)
+	</entry>
+	<entry key="insertBoard">
+		INSERT
+		  INTO BOARD
+			   (
+			    B_NO
+			  , B_ID
+			  , USER_NO
+			  , B_TITLE
+			  , B_DATE
+			  , B_CONTENT
+			  , B_CREATE_DATE
+			  , B_MODIFY_DATE
+			  , B_COUNT
+			  , COMPANION
+			  , STATUS 
+			  , B_TAG
+			   )
+		VALUES (
+				B_NO_SEQ.NEXTVAL
+			  , ?
+			  , ?
+			  , ?
+			  , TO_DATE(?, 'YYYY-MM-DD HH24:MI')
+			  , ?
+			  , SYSDATE
+			  , SYSDATE
+			  , DEFAULT
+			  , ?
+			  , DEFAULT
+			  , ?
+		)
+	</entry>
+	<entry key="insertImg">
+		INSERT
+		  INTO IMAGE
+		  (
+			IMAGE_NO
+		  , ROUTE
+		  , IMAGE_NAME
+		  , IMAGE_R_NAME
+		  , IMAGE_LEVEL
+		  , I_STATUS
+		  )
+		VALUES
+		(
+			IMG_NO_SEQ.NEXTVAL
+		  , ?
+		  , ?
+		  , ?
+		  , ?
+		  , DEFAULT
+		)
+	</entry>
+	<entry key="insertBI">
+		INSERT
+		  INTO BOARD_IMAGE
+		VALUES
+			(
+				B_NO_SEQ.CURRVAL
+			  , IMG_NO_SEQ.CURRVAL
+			)
+	</entry>
+	<entry key="insertCmt">
+		INSERT
+		  INTO COMMENT2
+		 	(
+		 		COMMENT2_NO
+		 	  , USER_NO
+		 	  , C_CREATE_DATE
+		 	  , C_MODIFY_DATE
+		 	  , C_COMMENT
+			  , B_NO
+		 	  , C_STATUS
+		 	)
+		VALUES
+			(
+				COMMENT2_NO_SEQ.NEXTVAL
+			  , ?
+			  , SYSDATE
+			  , SYSDATE
+			  , ?
+			  , ?
+			  , DEFAULT
+			)
+	</entry>
+	<entry key="selectCmtList">
+		SELECT
+				COMMENT2_NO
+			  , C.USER_NO
+			  , NICKNAME
+			  , C_COMMENT
+			  , B_NO
+			  , ORIGIN_RID
+			  , C_MODIFY_DATE
+		  FROM COMMENT2 C
+		  JOIN MEMBER M ON(C.USER_NO = M.USER_NO)
+		 WHERE B_NO = ?
+		   AND C_STATUS = 'Y'
+		 START WITH C.ORIGIN_RID IS NULL
+		CONNECT BY PRIOR C.COMMENT2_NO = C.ORIGIN_RID
+		 ORDER SIBLINGS BY C.COMMENT2_NO
+	</entry>
+	<entry key="deleteBoard">
+		UPDATE BOARD
+		   SET STATUS = 'N'
+		 WHERE B_NO = ?
+	</entry>
+	<entry key="increaseCount">
+		UPDATE BOARD
+		   SET B_COUNT = B_COUNT + 1
+		 WHERE B_NO = ?
+	</entry>
+	<entry key="deleteAttachment">
+		UPDATE IMAGE
+		   SET I_STATUS = 'N'
+		 WHERE IMAGE_R_NAME = ?
+	</entry>
+	<entry key="updateBoard">
+		UPDATE BOARD
+		   SET B_TITLE = ?
+			 , B_CONTENT = ?
+			 , B_MODIFY_DATE = SYSDATE
+		 WHERE B_NO = ?
+	</entry>
+	<entry key="updateImg">
+		UPDATE IMAGE
+		   SET IMAGE_NAME = ?
+		     , IMAGE_R_NAME = ?
+		 WHERE IMAGE_R_NAME = ?
+	</entry>
+	<entry key="insertAddedImg">
+		INSERT 
+		  INTO IMAGE
+			(
+			   IMAGE_NO
+			 , ROUTE
+			 , IMAGE_NAME
+			 , IMAGE_R_NAME
+			 , IMAGE_LEVEL
+			 , I_STATUS
+			)
+		VALUES
+			(
+			   IMG_NO_SEQ.NEXTVAL
+			 , ?
+			 , ?
+			 , ?
+			 , ?
+			 , DEFAULT
+			)
+	</entry>
+	<entry key="insertAddedBI">
+		INSERT
+		  INTO BOARD_IMAGE
+		VALUES
+			(
+				?
+			  , IMG_NO_SEQ.CURRVAL
+			)
+	</entry>
+	<entry key="insertReview">
+		INSERT
+		  INTO BOARD
+			   (
+			    B_NO
+			  , B_ID
+			  , USER_NO
+			  , B_TITLE
+			  , B_CONTENT
+			  , B_CREATE_DATE
+			  , B_MODIFY_DATE
+			  , B_COUNT
+			  , STATUS
+			  , B_TAG
+			   )
+		VALUES (
+				B_NO_SEQ.NEXTVAL
+			  , ?
+			  , ?
+			  , ?
+			  , ?
+			  , SYSDATE
+			  , SYSDATE
+			  , DEFAULT
+			  , DEFAULT
+			  , ?
+		)
+	</entry>
+	<entry key="selectGalleryList">
+		SELECT
+				B_NO
+			  , B_ID
+			  , USER_NO
+			  , NICKNAME
+			  , B_TITLE
+			  , B_COUNT
+			  , B_TAG
+              , ROUTE
+              , IMAGE_R_NAME
+		 FROM BOARD B
+		 JOIN MEMBER USING(USER_NO)
+		 JOIN BOARD_IMAGE USING(B_NO)
+		 JOIN IMAGE ON(ATTACHED_NO = IMAGE_NO)
+		WHERE B_ID BETWEEN 20 AND 40
+		  AND IMAGE_LEVEL = 0
+          AND B.STATUS = 'Y'
+        ORDER BY B_NO DESC
+	</entry>
+	<entry key="updateReview">
+		UPDATE BOARD
+		   SET
+				B_ID = ?
+			  , B_TITLE = ?
+			  , B_CONTENT = ?
+			  , B_MODIFY_DATE = SYSDATE
+			  , B_TAG = ?
+		 WHERE B_NO = ?
+	</entry>
+	<entry key="insertMsg">
+		INSERT
+		  INTO MESSAGE
+		VALUES
+			(
+				MSG_NO_SEQ.NEXTVAL
+			  , ?
+			  , ?
+			  , SYSDATE
+			  , ?
+			  , ?
+			  , NULL
+			  , DEFAULT
+			  , DEFAULT
+			)
+	</entry>
+	<entry key="deleteCmt">
+		UPDATE COMMENT2
+		   SET C_STATUS = 'N'
+		 WHERE COMMENT2_NO = ?
+	</entry>
+	<entry key="updateCmt">
+		UPDATE COMMENT2
+		   SET C_COMMENT = ?
+			 , C_MODIFY_DATE = SYSDATE
+		 WHERE COMMENT2_NO = ?
+	</entry>
+	<entry key="selectReportList">
+		SELECT *
+		  FROM REPORT
+		 WHERE B_NO = ?
+		   AND USER_NO = ?
+	</entry>
+	<entry key="insertReport">
+		INSERT
+		  INTO REPORT
+		VALUES
+			(
+				REPORT_NO_SEQ.NEXTVAL
+			  , ?
+			  , ?
+			  , ?
+			)
+	</entry>
+	<entry key="searchGalleryList">
+		SELECT
+				B_NO
+			  , B_ID
+			  , USER_NO
+			  , NICKNAME
+			  , B_TITLE
+			  , B_COUNT
+			  , B_TAG
+              , ROUTE
+              , IMAGE_R_NAME
+		 FROM BOARD B
+		 JOIN MEMBER USING(USER_NO)
+		 JOIN BOARD_IMAGE USING(B_NO)
+		 JOIN IMAGE ON(ATTACHED_NO = IMAGE_NO)
+		WHERE B_ID BETWEEN 20 AND 40
+		  AND IMAGE_LEVEL = 0
+          AND B.STATUS = 'Y'
+          AND B_TAG LIKE '%' || ? || '%'
+        ORDER BY B_NO DESC
+	</entry>
+	<entry key="insertReCmt">
+		INSERT
+		  INTO COMMENT2
+		  	(
+		  		COMMENT2_NO
+		  	  , USER_NO
+		  	  , C_CREATE_DATE
+		  	  , C_MODIFY_DATE
+		  	  , C_COMMENT
+		  	  , B_NO
+		  	  , ORIGIN_RID
+		  	  , C_STATUS
+		  	)
+		VALUES
+			(
+				COMMENT2_NO_SEQ.NEXTVAL
+			  , ?
+			  , SYSDATE
+			  , SYSDATE
+			  , ?
+			  , ?
+			  , ?
+			  , DEFAULT
+			)
+	</entry>
+</properties>

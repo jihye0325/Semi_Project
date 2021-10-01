@@ -1,0 +1,249 @@
+@charset "UTF-8";
+.outer {
+    width: 1000px;
+    margin: 50px auto;
+
+}
+
+.photo {
+	width:auto;
+}
+
+.qna_content {
+    width: 800px;
+    margin: auto;
+}
+
+.content {
+	width: 800px;
+	margin: auto;
+	padding: 10px;
+	resize: none;
+	border: 0px;
+	font-size : 15px;
+}
+
+.page_title {
+    text-align: center;
+}
+ 
+.info {
+    border-radius: 5px;
+    height: 50px;
+    padding: 5px;
+    background-color: rgb(254,229,207);
+    margin-bottom: 10px;
+    border-bottom: 1px solid lightgray;
+    font-size: small;
+    padding-right: 15px;
+}
+
+pre {
+    margin-left: 10px;
+}
+
+.write span:nth-child(2){
+    float:right;
+}
+
+.write {
+	display :float;
+    margin-bottom: 10px;  
+}
+
+.write2 span:nth-child(5){
+	float:right;
+}
+
+.qna_title {
+    margin-top: 30px;
+    font-size: x-large;
+    font-weight: bold;
+    padding-bottom: 20px;
+    border-bottom: 1px solid lightgray;
+}
+
+.qna_content {
+	min-height: 200px;
+	font-size: x-large;
+	border-bottom: 1px solid lightgray;
+	margin-bottom: 20px;
+}
+
+.file {
+	font-weight: bold;
+}
+
+.photo_area {
+	text-align: center;
+	border-bottom: 1px solid lightgray;
+	padding: 20px;
+	margin-bottom: 40px;
+}
+
+.photo {
+	max-width: 750px;
+}
+
+.reply_area {
+    width: 800px;
+    margin: auto;
+    border-bottom: 1px solid lightgray;
+}
+
+.reply_title {
+    font-size: large;
+    font-weight: bold;
+    margin-bottom: 10px;
+}
+
+.reply_list {
+	border-top: 2px solid #ffbf84;
+	border-bottom: 2px solid #ffbf84; 
+    min-height: 200px;
+}
+
+.noReply{
+	font-size: 25px;
+	font-weight: bold;
+	text-align: center;
+	margin-top: 85px;
+}
+
+.reply_ul {
+    display: flex;
+    justify-content:space-between;
+    list-style: none;
+    border-bottom: 1px solid lightgray;
+}
+
+.reply_ul:last-child {
+	border: none;
+}
+
+.writer_info {
+	display: flex;
+	list-style: none;
+}
+
+.rcontent {
+	margin-left: 40px;
+	padding: 10px;
+	width: 600px;
+	word-break: break-all;
+}
+.rwriter{
+    width: 70px;
+    font-weight: bold;
+}
+
+.rdate {
+    width: 250px;
+    text-align: center;
+}
+
+.reply_write {
+	margin-top: 10px;
+    display: flex;
+    width: 800px;
+    justify-content: center;
+    margin-bottom: 20px;
+}
+
+.reply_content {
+	margin-top:10px;
+    width: 690px;
+    margin-right: 15px;
+    resize: none;
+}
+
+.length_btn {
+	width: 80px;
+}
+
+.length_btn > button {
+	margin-top: 2px;
+	width: 75px;
+    width: 75px;
+    background-color: rgba(255, 191, 132);
+    border: 0;
+    border-radius: 5px;
+    cursor: pointer
+}
+
+.update {
+	width: 30px;
+	height: 16px;
+	font-size:13px;
+	margin-right: 5px;
+	cursor: pointer;
+	text-align: center;
+}
+
+.delete {
+	width: 30px;
+	height: 16px;
+	font-size:13px;
+	margin-right: 5px;
+	cursor: pointer;
+	text-align: center;
+}
+
+.ucontent {
+	background-color: transparent;
+	resize: none;
+	height: 25px;
+	font-size: 20px;
+}
+
+.cancle{
+	width: 25px;
+	height: 16px;
+	font-size: 10px;
+	border: 1px solid gray;
+	border-radius: 5px;
+	margin-right: 5px;
+	cursor: pointer;
+	text-align: center;
+}
+
+.ud_area > ul {
+	display: flex;
+    list-style: none;
+    margin-right: 10px;
+}
+
+.button_area button {
+    height: 30px;
+    background-color: rgba(255, 191, 132);
+    border: 0;
+    border-radius: 5px;
+    margin-right: 10px;
+    cursor: pointer;
+}
+
+.button_area {
+	width : 800px;
+	margin : 10px auto;
+	text-align: center;
+}
+
+#updateComment {
+	margin-left: 40px;
+	width: 500px;
+	resize: none;
+}
+
+#update_outer {
+	align-items :center;
+	display: flex;
+}
+
+#updateBtn {
+	margin-left: 10px;
+	height: 25px;
+    background-color: rgba(255, 191, 132, 1);
+    border: 0;
+    border-radius: 5px;
+    cursor: pointer;
+}

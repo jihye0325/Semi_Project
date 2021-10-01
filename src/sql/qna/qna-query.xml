@@ -1,0 +1,441 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE properties SYSTEM
+"http://java.sun.com/dtd/properties.dtd">
+<properties>
+	<!-- 게시글 총 개수 -->
+	<entry key="getListCount">
+		SELECT
+       		COUNT(*)
+   		 FROM QNA
+  		WHERE Q_STATUS = 'Y'
+	</entry>  
+	<!-- 제목 일치 게시글 개수 -->
+	<entry key="getTitleListCount">
+		SELECT
+	       COUNT(*)
+	    FROM QNA
+	  WHERE Q_TITLE LIKE '%' || ? || '%'
+	    AND Q_STATUS = 'Y'
+	</entry>
+	<!-- 내용 일치 게시글 개수 -->
+	<entry key="getContentListCount">
+		SELECT
+	       COUNT(*)
+	    FROM QNA
+	  WHERE Q_CONTENT LIKE '%' || ? || '%'
+	    AND Q_STATUS = 'Y'
+	</entry>
+	<!-- 작성자 일치 게시글 개수 -->
+	<entry key="getWriterListCount">
+		SELECT
+	       COUNT(*)
+	    FROM QNA
+	    JOIN MEMBER USING(USER_NO)
+	  WHERE ID LIKE '%' || ? || '%'
+	    AND Q_STATUS = 'Y'
+	</entry>
+	<!-- qnaList 조회 -->
+	<entry key="selectList">
+		SELECT
+		       Q_NO
+		     , Q_CNAME
+		     , Q_TITLE
+		     , USER_NO
+		     , ID
+		     , Q_COUNT
+		     , Q_CREATE_DATE
+		     , OPEN_STATUS
+		     ,(SELECT
+                    COUNT(*) 
+                    FROM COMMENT2
+                        WHERE Q_NO = A.Q_NO
+                          AND C_STATUS = 'Y') REPLY_COUNT
+		    FROM (SELECT
+		                ROWNUM RNUM
+		              , QLIST.*
+		        FROM (SELECT
+		                    *
+		                 FROM QNA 
+		                 JOIN QNA_CATEGORY USING(Q_CID)
+		                 JOIN MEMBER USING(USER_NO)
+		                WHERE Q_STATUS = 'Y'
+		                ORDER BY Q_NO DESC) QLIST) A
+		              WHERE RNUM BETWEEN ? AND ?
+	</entry>
+	<!-- 제목 일치 qnaList조회 -->
+	<entry key="selectTitleList">
+		SELECT
+		       Q_NO
+		     , Q_CNAME
+		     , Q_TITLE
+		     , USER_NO
+		     , ID
+		     , Q_COUNT
+		     , Q_CREATE_DATE
+		     , OPEN_STATUS
+		     ,(SELECT
+                    COUNT(*) 
+                    FROM COMMENT2
+                        WHERE Q_NO = A.Q_NO
+                          AND C_STATUS = 'Y') REPLY_COUNT
+		    FROM (SELECT
+		                ROWNUM RNUM
+		              , QLIST.*
+		        FROM (SELECT
+		                    *
+		                 FROM QNA 
+		                 JOIN QNA_CATEGORY USING(Q_CID)
+		                 JOIN MEMBER USING(USER_NO)
+		                WHERE Q_STATUS = 'Y'
+		                  AND Q_TITLE LIKE '%' || ? || '%'
+		                ORDER BY Q_NO DESC) QLIST) A
+		              WHERE RNUM BETWEEN ? AND ?
+	</entry>
+	<!-- 내용 일치 qnaList조회 -->
+	<entry key="selectContentList">
+		SELECT
+		       Q_NO
+		     , Q_CNAME
+		     , Q_TITLE
+		     , USER_NO
+		     , ID
+		     , Q_COUNT
+		     , Q_CREATE_DATE
+		     , OPEN_STATUS
+		     ,(SELECT
+                    COUNT(*) 
+                    FROM COMMENT2
+                        WHERE Q_NO = A.Q_NO
+                          AND C_STATUS = 'Y') REPLY_COUNT
+		    FROM (SELECT
+		                ROWNUM RNUM
+		              , QLIST.*
+		        FROM (SELECT
+		                    *
+		                 FROM QNA 
+		                 JOIN QNA_CATEGORY USING(Q_CID)
+		                 JOIN MEMBER USING(USER_NO)
+		                WHERE Q_STATUS = 'Y'
+		                  AND Q_CONTENT LIKE '%' || ? || '%'
+		                ORDER BY Q_NO DESC) QLIST) A
+		              WHERE RNUM BETWEEN ? AND ?
+	</entry>
+	<!-- 작성자 일치 qnaList조회 -->
+	<entry key="selectWriterList">
+		SELECT
+		       Q_NO
+		     , Q_CNAME
+		     , Q_TITLE
+		     , USER_NO
+		     , ID
+		     , Q_COUNT
+		     , Q_CREATE_DATE
+		     , OPEN_STATUS
+		     ,(SELECT
+                    COUNT(*) 
+                    FROM COMMENT2
+                        WHERE Q_NO = A.Q_NO
+                          AND C_STATUS = 'Y') REPLY_COUNT
+		    FROM (SELECT
+		                ROWNUM RNUM
+		              , QLIST.*
+		        FROM (SELECT
+		                    *
+		                 FROM QNA
+		                 JOIN QNA_CATEGORY USING(Q_CID)
+		                 JOIN MEMBER USING(USER_NO)
+		                WHERE Q_STATUS = 'Y'
+		                  AND ID LIKE '%' || ? || '%'
+		                ORDER BY Q_NO DESC) QLIST) A
+		              WHERE RNUM BETWEEN ? AND ?
+	</entry>
+	<entry key="insertQna">
+		INSERT 
+		INTO QNA
+		(
+			Q_NO
+		  , Q_CID
+		  , USER_NO
+		  , Q_TITLE
+		  , Q_CONTENT
+		  , Q_COUNT
+		  , Q_CREATE_DATE
+		  , Q_MODIFY_DATE
+		  , OPEN_STATUS
+		  , Q_STATUS
+		)
+		VALUES
+		(
+			Q_NO_SEQ.NEXTVAL
+		  , ?
+		  , ? 
+		  , ?
+		  , ?
+		  , DEFAULT
+		  , DEFAULT
+		  , DEFAULT
+		  , ?
+		  , DEFAULT
+		)
+	</entry>
+	<entry key="insertImage">
+		INSERT 
+		INTO IMAGE
+		(
+			IMAGE_NO
+		  , ROUTE
+		  , IMAGE_NAME
+		  , IMAGE_R_NAME
+		  , IMAGE_LEVEL
+		  , I_STATUS
+		)
+		VALUES
+		(
+			IMG_NO_SEQ.NEXTVAL
+		  , ?
+		  , ?
+		  , ?
+		  , 0
+		  , 'Y'
+		)
+	</entry>
+	<entry key="insertQnaImage">
+		INSERT
+		INTO QNA_IMAGE
+		(
+			Q_NO
+		  , IMAGE_NO
+		)
+		VALUES
+		(
+			Q_NO_SEQ.CURRVAL
+		  , IMG_NO_SEQ.CURRVAL
+		)
+	</entry>
+	<!-- 조회수 증가 -->
+	<entry key="increaseCount">
+		UPDATE QNA
+		   SET Q_COUNT = Q_COUNT + 1
+		 WHERE Q_NO = ?
+	</entry>
+	<!-- 게시글 조회 -->
+	<entry key="selectQna">
+		SELECT 
+		       Q_NO
+		     , Q_CID
+		     , Q_CNAME
+		     , USER_NO
+		     , ID
+		     , Q_TITLE
+		     , Q_CONTENT
+		     , Q_COUNT
+		     , OPEN_STATUS
+		     , Q_CREATE_DATE
+		     , Q_MODIFY_DATE
+		     , Q_STATUS
+		     , IMAGE_NO
+		     , ROUTE
+		     , IMAGE_NAME
+		     , IMAGE_R_NAME
+		    FROM QNA
+		    JOIN QNA_CATEGORY USING(Q_CID)
+		    JOIN MEMBER USING(USER_NO)
+		    JOIN QNA_IMAGE USING(Q_NO)
+		    JOIN IMAGE USING(IMAGE_NO)
+		 WHERE Q_STATUS = 'Y'
+		   AND I_STATUS = 'Y'
+		   AND Q_NO = ?
+	</entry>
+	<!-- Qna테이블 수정 -->
+	<entry key="updateQna">
+		UPDATE QNA
+		   SET Q_CID = ?
+		     , Q_TITLE = ?
+		     , Q_CONTENT = ?
+		     , OPEN_STATUS = ?
+		     , Q_MODIFY_DATE = SYSDATE
+		    WHERE Q_NO = ?
+	</entry>
+	<!-- Image테이블 수정 -->
+	<entry key="updateImage">
+		UPDATE IMAGE
+		   SET IMAGE_NAME = ?
+		     , IMAGE_R_NAME = ?
+		 WHERE IMAGE_R_NAME = ?
+	</entry>
+	<!-- Image 테이블 삽입 -->
+	<entry key="insertAddedImage">
+		INSERT 
+			INTO IMAGE
+			(
+				IMAGE_NO
+			  , ROUTE
+			  , IMAGE_NAME
+			  , IMAGE_R_NAME
+			  , IMAGE_LEVEL
+			  , I_STATUS
+			)
+			VALUES
+			(
+				IMG_NO_SEQ.NEXTVAL
+			  , ?
+			  , ?
+			  , ?
+			  , 0
+			  , 'Y'
+			)
+	</entry>
+	<entry key="insertAddedQnaImage">
+		INSERT
+			INTO QNA_IMAGE
+			(
+				Q_NO
+			  , IMAGE_NO
+			)
+			VALUES
+			(
+				?
+			  , IMG_NO_SEQ.CURRVAL 
+			)
+	</entry>
+	<!-- 나의 문의글 개수-->
+	<entry key="getMyListCount">
+		SELECT
+       		COUNT(*)
+   		 FROM QNA
+         JOIN MEMBER USING(USER_NO)
+  		WHERE Q_STATUS = 'Y'
+          AND ID = ?
+	</entry>
+	<entry key="selectMyList">
+		SELECT
+	       Q_NO
+	     , Q_CNAME
+	     , Q_TITLE
+	     , USER_NO
+	     , ID
+	     , Q_COUNT
+	     , Q_CREATE_DATE
+	     , OPEN_STATUS
+	     ,(SELECT
+                    COUNT(*) 
+                    FROM COMMENT2
+                        WHERE Q_NO = A.Q_NO
+                          AND C_STATUS = 'Y') REPLY_COUNT
+	    FROM (SELECT
+	                ROWNUM RNUM
+	              , QLIST.*
+	        FROM (SELECT
+	                    *
+	                 FROM QNA 
+	                 JOIN QNA_CATEGORY USING(Q_CID)
+	                 JOIN MEMBER USING(USER_NO)
+	                WHERE Q_STATUS = 'Y'
+	                  AND ID = ?
+	                ORDER BY Q_NO DESC) QLIST) A
+	              WHERE RNUM BETWEEN ? AND ?
+	</entry>
+	<!-- 사진첨부확인 -->
+	<entry key="selectQnaCount">
+		SELECT 
+		      COUNT (*)
+		    FROM QNA_IMAGE
+		   WHERE Q_NO = ?
+	</entry>
+	<entry key="selectQnaNoImage">
+		SELECT 
+			       Q_NO
+			     , Q_CID
+			     , Q_CNAME
+			     , USER_NO
+			     , ID
+			     , Q_TITLE
+			     , Q_CONTENT
+			     , Q_COUNT
+			     , OPEN_STATUS
+			     , Q_CREATE_DATE
+			     , Q_MODIFY_DATE
+			     , Q_STATUS
+			    FROM QNA
+			    JOIN QNA_CATEGORY USING(Q_CID)
+			    JOIN MEMBER USING(USER_NO)
+			 WHERE Q_STATUS = 'Y'
+			   AND Q_NO = ?
+	</entry>
+	<entry key="deleteQna">
+		UPDATE QNA
+		   SET Q_STATUS = 'N'
+		 WHERE Q_NO = ?
+	</entry>
+	<entry key="deleteImage">
+		UPDATE IMAGE
+		   SET I_STATUS = 'N'
+		 WHERE IMAGE_NO = (SELECT 
+                                IMAGE_NO
+                            FROM QNA_IMAGE 
+                            WHERE Q_NO = ?)
+	</entry>
+	<entry key="selectQ_ReplyList">
+		SELECT
+			  COMMENT2_NO
+			, ID
+			, C_CREATE_DATE
+			, C_MODIFY_DATE
+			, C_COMMENT
+			, Q_NO
+			, C_STATUS
+		FROM COMMENT2
+		JOIN MEMBER USING(USER_NO)
+	 WHERE Q_NO = ?
+	   AND C_STATUS = 'Y'
+	   ORDER BY COMMENT2_NO DESC
+	</entry>
+	<entry key="insertReply">
+		INSERT
+		INTO COMMENT2
+		(
+			COMMENT2_NO
+		  , USER_NO
+		  , C_CREATE_DATE
+		  , C_MODIFY_DATE
+		  , C_COMMENT
+		  , Q_NO
+		  , C_STATUS
+		)
+		VALUES
+		(
+			COMMENT2_NO_SEQ.NEXTVAL
+		  , ?
+		  , SYSDATE
+		  , SYSDATE
+		  , ?
+		  , ?
+		  , DEFAULT
+		)
+	</entry>
+	<!-- 댓글삭제 -->
+	<entry key="deleteReply">
+		UPDATE COMMENT2
+		   SET C_STATUS = 'N'
+		 WHERE COMMENT2_NO = ?
+		   AND C_STATUS = 'Y'
+	</entry>
+	<!-- 수정할 댓글 조회 -->
+	<entry key="selectQ_Reply">
+		SELECT
+		    COMMENT2_NO,
+		    ID,
+		    C_CREATE_DATE,
+		    C_COMMENT,
+		    Q_NO    
+		    FROM COMMENT2
+		    JOIN MEMBER USING(USER_NO)
+		    WHERE COMMENT2_NO = ?
+	</entry>
+	<!-- 댓글 수정 -->
+	<entry key="updateReply">
+		UPDATE COMMENT2
+		   SET C_COMMENT = ?
+		 WHERE COMMENT2_NO = ?
+	</entry>
+</properties>

@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE properties SYSTEM
+"http://java.sun.com/dtd/properties.dtd">
+<properties>
+	<entry key="reportListCount">
+	SELECT
+		COUNT(*)
+	FROM REPORT
+	</entry>
+	<entry key="selectReportList">
+	SELECT
+	*
+	FROM(
+		SELECT 
+		ROWNUM RNUM, RLIST.*
+		FROM(
+			SELECT
+			M1.USER_NO AS MUSER,
+			m1.ID,
+            R1.REPORT_NO,
+            R1.B_NO,
+            M1.USER_NAME,
+            B1.B_TITLE,
+            R1.REPORT_ID,
+            B1.USER_NO,
+            R2.REPORT_CON,
+            B1.B_CONTENT
+			FROM REPORT R1,REPORT_TYPE R2,MEMBER M1,BOARD B1
+			WHERE R1.REPORT_ID = R2.REPORT_ID
+			AND R1.USER_NO = M1.USER_NO
+			AND R1.B_NO = B1.B_NO
+			AND B1.STATUS = 'Y')
+		RLIST)
+	WHERE RNUM BETWEEN ? AND ?
+	</entry>
+	<entry key ="reportDetail">
+	SELECT
+			M1.USER_NO AS MUSER,
+			m1.ID,
+            R1.REPORT_NO,
+            B1.B_ID,
+            R1.B_NO,
+            M1.USER_NAME,
+            B1.B_TITLE,
+            R1.REPORT_ID,
+            B1.USER_NO,
+            R2.REPORT_CON,
+            B1.B_CONTENT
+			FROM REPORT R1,REPORT_TYPE R2,MEMBER M1,BOARD B1
+			WHERE R1.REPORT_ID = R2.REPORT_ID
+			AND R1.USER_NO = M1.USER_NO
+			AND R1.B_NO = B1.B_NO
+			AND B1.STATUS = 'Y'
+			 AND R1.REPORT_NO = ?
+	</entry>
+	<entry key ="deleteBoard">
+	UPDATE BOARD
+	SET STATUS = 'N'
+	WHERE B_NO = ?
+	</entry>
+</properties>

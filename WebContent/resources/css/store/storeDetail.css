@@ -1,0 +1,300 @@
+@charset "UTF-8";
+
+.outer {
+    width: 1000px;
+    margin: auto;
+    margin-top: 50px;
+}
+
+.search_bar {
+    background: rgb(254,229,207);
+    border-radius: 20px;
+    width: 1000px;
+    height:50px;
+    display: flex;
+    align-items: center;
+    margin-bottom: 20px;
+} 
+
+.location_list {
+    width: 600px;
+}
+
+.location_ul {
+    display: flex;
+    justify-content: space-between;
+    list-style-type: none;
+}
+
+.onmouseover {
+    color: orange;
+    cursor: pointer;
+}
+
+.search {
+    margin-left: 180px;
+    width: 60px;
+    display: flex;
+}
+
+.search>input {
+    border: 2px solid rgb(255,191,132);
+}
+
+.searchimg {
+    margin-left: 10px;
+    width: 30px;
+    height: 30px;
+    cursor: pointer;
+}
+
+.info_area {
+    display: flex;
+    margin: auto;
+    width: 900px;
+    margin-bottom: 10px;
+}
+
+.img_area {
+    margin-left: 10px;
+}
+
+.store_img {
+    width: 400px;
+    height: 300px;
+}
+
+.title_wish {
+	width: 454px;
+	display: flex;
+	justify-content: space-between;
+}
+
+.wishlist_img {
+    width: 55px;
+    cursor: pointer;
+}
+
+.info_img >img{
+    width: 30px;
+    height: 30px;
+    margin-right: 5px;
+}
+
+.info {
+    margin-left: 30px;
+}
+
+.info >div {
+    margin-bottom: 5px;
+}
+
+.title {
+    font-size: xx-large;
+    font-weight: bold;
+}
+
+.tel_area {
+    align-items:center;
+    display: flex;
+}
+
+.address_area {
+    align-items:center;
+    display: flex;
+}
+
+.time_area {
+    display: flex;
+    align-items:center;
+}
+
+.time_info {
+	width: 100px;
+}
+.time {
+    margin-left: 10px;
+    white-space:pre-wrap;
+}
+
+.address_area {
+    align-items:center;
+    display: flex;
+}
+
+.menu_area img{
+    width: 30px;
+    height: 30px;
+    margin-right: 10px;
+}
+
+.menu_outer {
+    margin-top: 20px;
+    border-top: 1px solid gray;
+    padding-top: 10px;
+}
+
+.menu_area {
+    display: flex;
+    align-items: center;
+    font-weight: bold;
+}
+
+.menu {
+	margin-top: 10px;
+}
+
+.reply_outer {
+    margin: auto;
+    border-radius: 10px;
+    width: 880px;
+}
+
+.score_area img {
+    width: 30px;
+    height: 30px;
+    margin-right: 5px;
+}
+
+.score_area {
+    border-radius: 5px;
+    background-color: #ffbf8459;
+    padding: 5px;
+    display: flex;
+    align-items: center;
+    font-size: large;
+    font-weight: bold;
+}
+
+.reply_area {
+    margin: auto;
+    background: white;
+    border-radius: 5px;
+}
+
+.gender {
+    width: 30px;
+    height: 30px;
+}
+
+.reply_ul {
+    display: flex;
+    justify-content: center;
+    list-style: none;
+    border-bottom: 1px solid black;
+    padding: 5px;
+    align-items: center;
+    margin: 0px;
+}
+
+.rwriter{
+    width: 80px;
+    text-align: center;
+}
+
+.rcontent {
+    margin-left: 10px;
+    width: 500px;
+}
+
+.rcontent div {
+	word-wrap:break-word;
+	width: 480px;
+}
+
+.rdate {
+	margin-left: 10px;
+    width: 130px;
+}
+
+.score_img {
+    display: flex;
+    width: 100px;
+	margin-right: 3px;
+}
+
+.star {
+    width: 20px;
+    height: 20px;
+}
+
+.reply_area {
+	min-height: 300px;
+}
+.reply_write {
+    display: flex;
+    height: 60px;
+    background-color: #ffbf8459;
+    justify-content: center;
+    align-items: center;
+}
+.reply_content {
+	margin-left: 10px;
+    width: 500px;
+    height: 30px;
+    margin-right: 15px;
+    resize: none;
+}
+
+.delete {
+	width: 40px;
+	margin-right: 10px;
+	cursor: pointer;
+}
+
+.reply_score {
+	display: flex;
+}
+
+.reply_score div {
+	margin-right: 2px;
+	align-items: center;
+	text-align : center;
+}
+
+.star_score {
+	font-size: 25px;
+	color: lightgray;
+}
+.on {
+	color: rgb(255, 193, 7);
+}
+
+.reply_write> button {
+    height: 30px;
+    background-color: rgb(255, 191, 132);
+    border: 0;
+    border-radius: 5px;
+    cursor: pointer;
+    margin-left: 10px;
+}
+
+.button_area {
+    text-align: center;
+}
+
+
+.button_area> button {
+    margin-top: 15px;
+    margin-right: 5px;
+    height: 30px;
+    background-color: rgb(255, 191, 132);
+    border: 0;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+
+.map_area {
+	width: 1000px;
+    text-align: center;
+    margin-bottom: 10px;
+}
+
+.map {
+	margin: auto;
+    width: 880px;
+    height: 400px;
+}
+
+/*카카오지도*/

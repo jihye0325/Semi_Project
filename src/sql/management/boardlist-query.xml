@@ -1,0 +1,206 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE properties SYSTEM
+"http://java.sun.com/dtd/properties.dtd">
+<properties>
+	<entry key="boardListCount">
+	SELECT
+		COUNT(*)
+	FROM BOARD b,MEMBER m
+	WHERE b.USER_NO = m.USER_NO
+	AND b.STATUS = 'Y'
+	</entry>
+	<entry key="boardIdSearchCount">
+	
+	SELECT
+		COUNT(*)
+	FROM BOARD b,MEMBER m
+	WHERE b.USER_NO = m.USER_NO
+	AND b.STATUS = 'Y'
+	AND ID LIKE '%' || ? || '%'
+	</entry>
+	<entry key="boardNameSearchCount">
+	SELECT
+		COUNT(*)
+	FROM BOARD b,MEMBER m
+	WHERE b.USER_NO = m.USER_NO
+	AND b.STATUS = 'Y'
+	AND user_name LIKE '%' || ? || '%'
+	</entry>
+	
+	<entry key="boardIdSearch">
+	SELECT
+		*
+	FROM(SELECT ROWNUM RNUM, MLIST.*
+		FROM(SELECT
+		b.B_NO,
+        b.B_ID,
+        b.USER_NO,
+        b.B_TITLE,
+        b.B_DATE,
+        b.B_CONTENT,
+        b.B_CREATE_DATE,
+        b.B_MODIFY_DATE,
+        b.B_COUNT,
+        b.COMPANION,
+        b.STATUS,
+        m.ID,
+        b.B_TAG
+	FROM BOARD b,MEMBER m
+	WHERE b.USER_NO = m.USER_NO
+	AND b.STATUS = 'Y'
+		AND ID LIKE '%' || ? || '%'
+		ORDER BY USER_NO ASC) MLIST)
+	WHERE RNUM BETWEEN ? AND ?
+	</entry>
+	
+	<entry key="b_titleSearch">
+	SELECT
+		*
+	FROM(SELECT ROWNUM RNUM, MLIST.*
+		FROM(SELECT
+		b.B_NO,
+        b.B_ID,
+        b.USER_NO,
+        b.B_TITLE,
+        b.B_DATE,
+        b.B_CONTENT,
+        b.B_CREATE_DATE,
+        b.B_MODIFY_DATE,
+        b.B_COUNT,
+        b.COMPANION,
+        b.STATUS,
+        m.ID,
+        b.B_TAG
+	FROM BOARD b,MEMBER m
+	WHERE b.USER_NO = m.USER_NO
+	AND b.STATUS = 'Y'
+	AND B_TITLE LIKE '%' || ? || '%'
+	ORDER BY USER_NO ASC) MLIST)
+	WHERE RNUM BETWEEN ? AND ?
+	</entry>
+	
+	
+	
+	<entry key = "selectBoardList">
+	SELECT
+		*
+	FROM(
+	SELECT ROWNUM RNUM, MLIST.*
+		FROM(SELECT
+		b.B_NO,
+        b.B_ID,
+        b.USER_NO,
+        b.B_TITLE,
+        b.B_DATE,
+        b.B_CONTENT,
+        b.B_CREATE_DATE,
+        b.B_MODIFY_DATE,
+        b.B_COUNT,
+        b.COMPANION,
+        b.STATUS,
+        m.ID,
+        b.B_TAG
+	FROM BOARD b,MEMBER m
+	WHERE b.USER_NO = m.USER_NO
+	AND b.STATUS = 'Y'
+	ORDER BY b.B_NO ASC) MLIST)
+	WHERE RNUM BETWEEN ? AND ?
+	</entry>
+	
+	<entry key = "storeListCount">
+	SELECT 
+		COUNT(*)
+	FROM store
+	WHERE S_STATUS = 'Y'
+	ORDER BY S_NO ASC
+	</entry>
+	<entry key = "roomListCount">
+	SELECT 
+		COUNT(*)
+	FROM ROOM_INFO
+	WHERE R_STATUS = 'Y'
+	ORDER BY R_NO ASC
+	</entry>
+	
+	<entry key="storeNameSearch">
+	SELECT
+		COUNT(*)
+	FROM STORE
+	WHERE S_STATUS = 'Y'
+	AND S_NAME LIKE '%' || ? || '%'
+	</entry>
+	<entry key = "selectStoreList">
+	SELECT
+		*
+	FROM(SELECT ROWNUM RNUM, SLIST.*
+		FROM(SELECT 
+			*
+		FROM STORE
+		WHERE S_STATUS = 'Y'
+		ORDER BY S_NO ASC) SLIST)
+	WHERE RNUM BETWEEN ? AND ?
+	</entry>
+	
+	<entry key = "deleteStore">
+	UPDATE STORE
+	SET S_STATUS = 'N'
+	WHERE S_NO = ?
+	</entry>
+	
+	<entry key = "selectRoomList">
+	SELECT
+		*
+	FROM(SELECT ROWNUM RNUM, RLIST.*
+		FROM(SELECT 
+			*
+		FROM ROOM_INFO
+		WHERE R_STATUS = 'Y'
+		ORDER BY R_NO ASC) RLIST)
+	WHERE RNUM BETWEEN ? AND ?
+	
+	</entry>
+	<entry key = "deleteRoom">
+	UPDATE ROOM_INFO
+	SET R_STATUS = 'N'
+	WHERE R_NO = ?
+	</entry>
+	<entry key = "selectNoticeList">
+	SELECT
+		*
+	FROM(SELECT ROWNUM RNUM, NLIST.*
+		FROM(SELECT 
+			*
+		FROM NOTICE
+		WHERE N_STATUS = 'Y'
+		ORDER BY N_NO ASC) NLIST)
+	WHERE RNUM BETWEEN ? AND ?
+	</entry>
+	<entry key = "deleteNotice">
+	UPDATE NOTICE
+	SET N_STATUS = 'N'
+	WHERE N_NO = ?
+	</entry>
+	
+	<entry key="noticeListCount">
+	SELECT
+		COUNT(*)
+	FROM NOTICE
+	WHERE N_STATUS = 'Y'
+	</entry>
+	
+	<entry key="noticeTitleSearch">
+	SELECT
+		COUNT(*)
+	FROM NOTICE
+	WHERE N_STATUS = 'Y'
+	AND N_TITLE LIKE '%' || ? || '%'
+	</entry>
+	<entry key = "deleteBoard">
+	UPDATE BOARD
+	SET STATUS = 'N'
+	WHERE B_NO = ?
+	</entry>
+	
+	
+	
+</properties>

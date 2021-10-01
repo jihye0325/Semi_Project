@@ -1,0 +1,176 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE properties SYSTEM "http://java.sun.com/dtd/properties.dtd">
+<properties>
+	<entry key="noticeListCount">
+		SELECT COUNT(*)
+		  FROM NOTICE
+		 WHERE N_STATUS = 'Y'
+	</entry>
+	<entry key="selectSearchCount">
+		SELECT COUNT(*)
+		  FROM NOTICE
+		 WHERE N_STATUS = 'Y'
+		   AND (N_TITLE LIKE '%' || ? || '%'
+		    OR N_CONTENT LIKE '%' || ? || '%')
+	</entry>
+	<entry key="selectSearchList">
+		SELECT
+				N_NO
+			  , NICKNAME
+			  , N_TITLE
+			  , N_CONTENT
+			  , N_DATE
+			  , N_HIT
+			  , N_MODIFY_DATE
+		  FROM (SELECT
+		  				ROWNUM RNUM
+		  			  , BLIST.*
+		  		  FROM (SELECT *
+		  		  		  FROM NOTICE
+		  		  		  JOIN MEMBER USING(USER_NO)
+		  		  		  WHERE N_STATUS = 'Y'
+		  		  		    AND (N_TITLE LIKE '%' || ? || '%'
+		  		  		     OR N_CONTENT LIKE '%' || ? || '%')
+		  		  		ORDER BY N_NO DESC) BLIST)
+		 WHERE RNUM BETWEEN ? AND ?
+	</entry>
+	<entry key="selectList">
+		SELECT
+				N_NO
+			  , NICKNAME
+			  , N_TITLE
+			  , N_CONTENT
+			  , N_DATE
+			  , N_HIT
+			  , N_MODIFY_DATE
+		 FROM (SELECT
+		 				ROWNUM RNUM
+		 			  , BLIST.*
+		 		  FROM (SELECT *
+		 		  		  FROM NOTICE
+		 		  		  JOIN MEMBER USING(USER_NO)
+		 		  		  WHERE N_STATUS = 'Y'
+		 		  		ORDER BY N_NO DESC) BLIST)
+		WHERE RNUM BETWEEN ? AND ?
+	</entry>
+	<entry key="insertNotice">
+		INSERT
+		  INTO NOTICE
+		VALUES (
+				N_NO_SEQ.NEXTVAL
+			  , ?
+			  , ?
+			  , ?
+			  , SYSDATE
+			  , DEFAULT
+			  , DEFAULT
+			  , SYSDATE
+			)
+	</entry>
+	<entry key="increaseCount">
+		UPDATE NOTICE
+		   SET N_HIT = N_HIT + 1
+		 WHERE N_NO = ?
+	</entry>
+	<entry key="selectNotice">
+		SELECT
+				N_NO
+			  , USER_NO
+			  , NICKNAME
+			  , N_TITLE
+			  , N_CONTENT
+			  , N_DATE
+			  , N_HIT
+			  , N_MODIFY_DATE
+		  FROM NOTICE
+		  JOIN MEMBER USING(USER_NO)
+		 WHERE N_NO = ?
+	</entry>
+	<entry key="insertCmt">
+		INSERT
+		  INTO COMMENT2
+			(
+				COMMENT2_NO
+			  , USER_NO
+			  , C_CREATE_DATE
+			  , C_MODIFY_DATE
+			  , C_COMMENT
+			  , N_NO
+			)
+		VALUES
+			(
+				COMMENT2_NO_SEQ.NEXTVAL
+			  , ?
+			  , SYSDATE
+			  , SYSDATE
+			  , ?
+			  , ?
+			)
+	</entry>
+	<entry key="selectCmtList">
+		SELECT
+				COMMENT2_NO
+			  , C.USER_NO
+			  , GENDER
+			  , NICKNAME
+			  , C_COMMENT
+			  , N_NO
+			  , ORIGIN_RID
+			  , C_MODIFY_DATE
+		  FROM COMMENT2 C
+		  JOIN MEMBER M ON(C.USER_NO = M.USER_NO)
+		 WHERE N_NO = ?
+		   AND C_STATUS = 'Y'
+		 START WITH C.ORIGIN_RID IS NULL
+		CONNECT BY PRIOR C.COMMENT2_NO = C.ORIGIN_RID
+		 ORDER SIBLINGS BY C.COMMENT2_NO
+	</entry>
+	<entry key="deleteCmt">
+		UPDATE COMMENT2
+		   SET C_STATUS = 'N'
+		 WHERE COMMENT2_NO = ?
+	</entry>
+	<entry key="updateCmt">
+		UPDATE COMMENT2
+		   SET C_COMMENT = ?
+		     , C_MODIFY_DATE = SYSDATE
+		 WHERE COMMENT2_NO = ?
+	</entry>
+	<entry key="updateNotice">
+		UPDATE NOTICE
+		   SET N_TITLE = ?
+		     , N_CONTENT = ?
+		     , N_MODIFY_DATE = SYSDATE
+		 WHERE N_NO = ?
+	</entry>
+	<entry key="deleteNotice">
+		UPDATE NOTICE
+		   SET N_STATUS = 'N'
+		 WHERE N_NO = ?
+	</entry>
+	<entry key="insertReCmt">
+		INSERT
+		  INTO COMMENT2
+		  	(
+		  		COMMENT2_NO
+		  	  , USER_NO
+		  	  , C_CREATE_DATE
+		  	  , C_MODIFY_DATE
+		  	  , C_COMMENT
+		  	  , N_NO
+		  	  , ORIGIN_RID
+		  	  , C_STATUS
+		  	)
+		VALUES
+			(
+				COMMENT2_NO_SEQ.NEXTVAL
+			  , ?
+			  , SYSDATE
+			  , SYSDATE
+			  , ?
+			  , ?
+			  , ?
+			  , DEFAULT
+			)
+	</entry>
+</properties>

@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE properties SYSTEM
+"http://java.sun.com/dtd/properties.dtd">
+<properties>
+	<entry key = "memberListCount">
+	SELECT 
+		COUNT(*)
+	FROM MEMBER
+	WHERE STATUS = 'Y'
+	</entry>
+	
+	<entry key = "boardListcount">
+	SELECT 
+		COUNT(*)
+	FROM BOARD
+	WHERE STATUS = 'Y'
+	</entry>
+	
+	<entry key = "noticeListcount">
+	SELECT 
+		COUNT(*)
+	FROM NOTICE
+	WHERE  N_STATUS = 'Y'
+	</entry>
+	
+	<entry key = "storeListcount">
+	SELECT 
+		COUNT(*)
+	FROM STORE
+	WHERE  S_STATUS = 'Y'
+	</entry>
+	
+	<entry key = "roomListcount">
+	SELECT 
+		COUNT(*)
+	FROM ROOM_INFO
+	WHERE  R_STATUS = 'Y'
+	</entry>
+	
+	
+	
+</properties>

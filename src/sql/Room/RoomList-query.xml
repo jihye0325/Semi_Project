@@ -1,0 +1,355 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE properties SYSTEM "http://java.sun.com/dtd/properties.dtd">
+<properties>
+<!-- 개시글의 총 개수가 몇개인지 먼저 알아야됨  --> <!-- 5번 -->
+<entry key ="getListCount">
+	SELECT 
+		COUNT(*) 
+	FROM ROOM_INFO 
+    WHERE R_STATUS = 'Y'
+</entry>
+
+
+<!-- 전체 숙소 리스트 **********************************************  -->
+<entry key = "selectRoomList">
+SELECT
+             R_NO
+            ,R_NAME
+            ,R_TEL
+            ,R_INFO
+            ,R_PAY
+            ,R_ADDRESS
+            ,USER_NO
+            ,USER_NAME
+            ,R_START
+            ,R_END
+            ,R_STATUS
+            ,R_HEAD
+
+FROM(SELECT
+            ROWNUM RNUM,RLIST.*
+FROM ( SELECT
+                        *
+                        FROM ROOM_INFO
+                        JOIN MEMBER USING (USER_NO)
+                        WHERE R_STATUS='Y'
+                        ORDER BY R_NO DESC) RLIST)
+WHERE RNUM BETWEEN ? AND ? 
+
+
+
+</entry>
+
+<!-- 섬네일 사진 총 개수 ********************************************** -->
+<entry key="getimageListCount">
+ SELECT
+           COUNT(*)
+   FROM ROOM_INFO
+      JOIN ROOM_IMAGE USING(R_NO)
+      JOIN IMAGE USING(IMAGE_NO)
+    WHERE R_STATUS ='Y' AND IMAGE_LEVEL=0
+  ORDER BY R_NO DESC
+
+</entry>
+
+<!-- 섬네일 사진 상세정보 **********************************************-->
+<entry key="selectRoomImage">
+SELECT
+             R_NO
+            ,R_NAME
+            ,R_INFO
+            ,ROUTE
+            ,IMAGE_R_NAME
+            ,R_TEL
+            ,R_PAY
+            ,R_ADDRESS
+            ,USER_NO
+            ,USER_NAME  <!-- 추가 -->
+            ,R_START
+            ,R_END
+            ,R_STATUS
+            ,R_HEAD
+            ,IMAGE_NO
+            
+FROM( SELECT
+                ROWNUM RNUM,RLIST.*
+                FROM ( SELECT
+                                        *
+                                        FROM ROOM_INFO
+                                        JOIN MEMBER USING(USER_NO) <!-- 추가 -->
+                                        JOIN ROOM_IMAGE USING(R_NO)
+                                        JOIN IMAGE USING(IMAGE_NO)
+                                        WHERE R_STATUS ='Y' AND IMAGE_LEVEL=0
+                                        ORDER BY R_NO DESC )    RLIST)
+WHERE RNUM BETWEEN ? AND ?
+
+</entry>
+
+<!-- 지역선택 -->
+<entry key="getAreaListCount">
+SELECT
+	       COUNT(*)
+	    FROM ROOM_INFO
+	  WHERE R_ADDRESS LIKE '%' || ? || '%'
+	    AND R_STATUS = 'Y'
+</entry>
+<entry key="selectAreaList">
+SELECT
+             R_NO
+            ,R_NAME
+            ,R_INFO
+            ,ROUTE
+            ,IMAGE_R_NAME
+            ,R_TEL
+            ,R_PAY
+            ,R_ADDRESS
+            ,USER_NO
+            ,USER_NAME 
+            ,R_START
+            ,R_HEAD
+            ,R_END
+            ,R_STATUS
+           , IMAGE_NO
+     , ROUTE
+     , IMAGE_NAME
+     , IMAGE_R_NAME
+FROM( SELECT
+                ROWNUM RNUM,RLIST.*
+                FROM ( SELECT
+                                        *
+                                        FROM ROOM_INFO
+                                        JOIN MEMBER USING(USER_NO) 
+                                        JOIN ROOM_IMAGE USING(R_NO)
+                                        JOIN IMAGE USING(IMAGE_NO)
+                                        WHERE R_STATUS ='Y'
+                                        AND IMAGE_LEVEL=0
+                                        AND I_STATUS = 'Y'  
+                                        AND R_ADDRESS LIKE '%' || ? || '%'
+                                        ORDER BY R_NO DESC )    RLIST)
+WHERE RNUM BETWEEN ? AND ?
+</entry>
+
+<!-- 위시리스트 담기 **********************************************  -->
+<entry key="insertWish">
+	INSERT
+	INTO ROOM_WISHLIST
+	(R_NO,USER_NO)
+	VALUES(?,?)
+</entry>
+<!-- 위시리스트 삭제 **********************************************  -->
+<entry key="deleteWish">
+	DELETE 
+	FROM ROOM_WISHLIST 
+	WHERE USER_NO= ? AND R_NO= ?
+</entry>
+<!-- 특정유저가 담은 위시리스트 **********************************************  -->
+
+<entry key="selectRoomWishList">
+ SELECT
+  *
+  FROM ROOM_WISHLIST
+  WHERE USER_NO  = ?
+</entry>
+
+<entry key="selectRoom">  
+<!--
+SELECT
+R_NO
+,R_NAME
+,R_TEL  숙소 번호 
+,R_INFO
+,R_PAY
+,R_ADDRESS
+,USER_NO 
+,USER_NAME 
+,PHONE  
+,R_START
+,R_END
+,R_STATUS
+,R_HEAD
+,IMAGE_NO
+,ROUTE
+,IMAGE_NAME
+,IMAGE_R_NAME
+,IMAGE_LEVEL
+,gender
+FROM ROOM_INFO  
+JOIN ROOM_IMAGE USING(R_NO)
+JOIN IMAGE USING(IMAGE_NO)
+JOIN MEMBER USING(USER_NO)
+WHERE R_NO =? AND R_STATUS='Y' AND IMAGE_LEVEL=0
+
+-->
+SELECT
+    R_NO
+    ,R_NAME
+    ,R_TEL
+    ,R_INFO
+    ,R_PAY
+    ,R_ADDRESS
+    ,USER_NO
+    ,USER_NAME
+    ,PHONE 
+    ,R_START
+    ,R_END
+    ,R_STATUS
+    ,R_HEAD
+    ,IMAGE_NO
+    ,ROUTE
+    ,IMAGE_NAME
+    ,IMAGE_R_NAME
+    ,IMAGE_LEVEL
+    ,gender
+    , NVL( ROUND( ( SELECT 
+                        AVG(SCORE)
+                        FROM COMMENT1 
+                        WHERE R_NO = ? AND COMMENT_STATUS = 'Y'
+                        GROUP BY R_NO),1 ),0) R_SCORE
+FROM ROOM_INFO  
+JOIN ROOM_IMAGE USING(R_NO)
+JOIN IMAGE USING(IMAGE_NO)
+JOIN MEMBER USING(USER_NO)
+WHERE R_NO =? AND R_STATUS='Y' AND IMAGE_LEVEL=0
+
+
+</entry>
+<!-- 작은 사진들  -->
+<entry key="sroom">
+SELECT
+R_NO
+,IMAGE_NO
+,ROUTE
+,IMAGE_NAME
+,IMAGE_R_NAME
+,IMAGE_LEVEL
+FROM  ROOM_INFO
+JOIN ROOM_IMAGE USING(R_NO)
+JOIN IMAGE USING(IMAGE_NO)
+WHERE R_NO = ? AND IMAGE_LEVEL =1
+
+</entry>
+<entry key="selectRoomWishList2">
+select
+         R_NO
+            ,USER_NO
+from ( select
+*
+from room_wishlist  )
+where r_no =?  and  user_no = ?
+</entry>
+
+<!-- 댓글 SELECT **********************************************-->
+<entry key="selectReplyList">
+<!--    SELECT
+		COMMENT1_NO
+		,R_NO
+		,USER_NO
+		,USER_NAME
+		,NICKNAME
+		,COMMENT_INFO
+		,COMMENT_CREATE_DATE
+		,score
+		,GENDER
+	FROM COMMENT1
+		JOIN MEMBER USING(USER_NO)
+	WHERE R_NO= ?
+	AND COMMENT_STATUS = 'Y'
+	ORDER BY COMMENT1_NO DESC
+-->
+SELECT
+		COMMENT1_NO
+		,R_NO
+		,USER_NO
+		,USER_NAME
+		,NICKNAME
+		,COMMENT_INFO
+		,COMMENT_CREATE_DATE
+		,SCORE
+		,GENDER
+        ,ROUND( ( SELECT 
+                        AVG(SCORE)
+                        FROM COMMENT1 
+                        WHERE R_NO = ? AND COMMENT_STATUS = 'Y'
+                        GROUP BY R_NO),1 ) AVG_SCORE
+	FROM COMMENT1
+		JOIN MEMBER USING(USER_NO)
+	WHERE R_NO= ?
+	AND COMMENT_STATUS = 'Y'
+	ORDER BY COMMENT1_NO DESC
+</entry>
+<entry key="insertReply">
+INSERT 
+INTO COMMENT1
+(
+	COMMENT1_NO
+	,R_NO
+	,USER_NO
+	,COMMENT_INFO
+	,COMMENT_CREATE_DATE
+	,COMMENT_MODIFY_DATE
+	,score
+	,COMMENT_STATUS
+)
+VALUES
+(
+	COMMENT1_NO_SEQ.NEXTVAL
+	,?
+	,?
+	,?
+	,SYSDATE
+	,SYSDATE
+	,?
+	,DEFAULT
+)
+
+</entry>
+
+<!-- 마이페이지 예약확인에 insert -->
+<entry key="insertBook">
+INSERT 
+INTO ROOM_BOOKING 
+
+VALUES(
+	BOOKING_SEQ.NEXTVAL
+	,?
+	,?
+	,'Y'
+	,To_DATE(?,'yyyy/mm/dd')
+	,To_DATE(?,'yyyy/mm/dd')
+	,DEFAULT
+	,?
+)
+
+</entry>
+<!-- 예약 요청이 들어오면 Room_info 상태 변경 -->
+<entry key="updateRoom">
+UPDATE ROOM_INFO 
+SET R_START=? , R_END=? , R_R_HEAD=? , SUM=?
+WHERE R_NO=?
+</entry>
+
+<!-- 예약확인쪽에 insert 되면 DB 쪽에 insert -->
+<entry key="PayBookInsert">
+INSERT INTO PAYMENT
+(
+		P_NO
+		,BK_NO  <!-- ROOM_BOOKING을 참조하고 있음-->
+		,PG
+		,MONEY
+		,P_STATUS
+		,P_PAID
+)
+VALUES
+(
+		?
+		,BOOKING_SEQ.currval
+		,?
+		,?
+		,DEFAULT
+		,?
+)
+
+
+</entry>
+
+</properties>

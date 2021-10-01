@@ -1,0 +1,151 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE properties SYSTEM "http://java.sun.com/dtd/properties.dtd">
+<properties>
+    <entry key="loginMember">
+        SELECT
+                *
+            FROM MEMBER
+        WHERE ID = ?
+        AND PASSWORD = ?
+        AND STATUS = 'Y'
+    </entry>
+    <!--
+    <entry key="insertMember">
+    	INSERT INTO MEMBER
+		(
+		USER_NO
+		,   ID
+		,   PASSWORD
+		,   USER_NAME
+		,   PHONE
+		,   GENDER
+		,   NICKNAME
+		,   SIGN_DATE
+		,   MODIFY_DATE
+		,   AUTHORITY
+		,   STATUS
+		,   ADDRESS
+		)
+		VALUES
+		(
+		USER_NO_SEQ.NEXTVAL
+		,   ?
+		,   ?
+		,   ?
+		,   ?
+		,   ?
+		,   ?
+		,   SYSDATE
+		,   SYSDATE
+		,   NULL
+		,   DEFAULT
+		,   ?
+		)
+    </entry>
+    -->
+    <entry key="updateMember">
+    	UPDATE
+    			MEMBER
+    		SET
+    			USER_NAME = ?
+    		,	PHONE = ?
+    		,	GENDER = ?
+    		,	NICKNAME = ?
+    	WHERE USER_NO = ?
+    </entry>
+    <entry key="selectMember">
+    	SELECT
+    			*
+    		FROM MEMBER
+    	WHERE USER_NO = ?
+    </entry>
+    <entry key="updatePwd">
+    	UPDATE
+    			MEMBER
+    		SET
+    			PASSWORD = ?
+    	WHERE USER_NO = ?
+    	AND PASSWORD = ?
+    </entry>
+    <entry key="searchId">
+    	SELECT
+    			ID
+    		FROM MEMBER
+    	WHERE USER_NAME = ?
+    	AND PHONE = ?
+    </entry>
+    <entry key="searchPwd">
+    	UPDATE
+    			MEMBER
+    		SET
+    			PASSWORD = ?
+    	WHERE ID = ?
+    </entry>
+    <!-- 비밀번호 찾기용 id 조회 -->
+    <entry key="selectMemberId">
+    	SELECT
+    			*
+    		FROM MEMBER
+    	WHERE ID = ?
+    </entry>
+    <entry key="idCheck">
+    	SELECT
+    			COUNT(*)
+    		FROM MEMBER
+    	WHERE ID = ?
+    </entry>
+    <entry key="nicknameCheck">
+    	SELECT
+    			COUNT(*)
+    		FROM MEMBER
+    	WHERE NICKNAME = ?
+    </entry>
+    <entry key="deleteMember">
+    	update member set status='N' where user_no = ?
+    </entry>
+    <entry key="updateMember">
+		update member set
+		password=?,
+		phone=?,
+		nickname=?,
+		address=?,
+		modify_date=SYSDATE
+		where 
+		user_no=?
+	</entry>
+	<entry key="selectMember">
+		select * from member where user_no = ?
+	</entry>
+	<entry key="insertMember">
+	INSERT INTO MEMBER
+	(
+	USER_NO
+	, USER_NAME
+	, ID
+	, PASSWORD
+	, GENDER
+	, NICKNAME
+	, ADDRESS
+	, SIGN_DATE
+	, MODIFY_DATE
+	, AUTHORITY
+	, STATUS
+	, PHONE
+	)
+	VALUES
+	(
+	USER_NO_SEQ.NEXTVAL
+	, ?
+	, ?
+	, ?
+	, ?
+	, ?
+	, ?
+	, SYSDATE
+	, SYSDATE
+	, NULL
+	, DEFAULT
+	, ?
+	)
+	</entry>
+</properties>

@@ -1,0 +1,397 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE properties SYSTEM "http://java.sun.com/dtd/properties.dtd">
+<properties>
+	<entry key="getMessageReveiveListCount">
+		select
+		count(*)
+		from message
+		where msg_receiver = ? and
+		msg_status = 'Y'
+	</entry>
+	<entry key="getMessageSendListCount">
+		select
+		count(*)
+		from message
+		where msg_sender = ? and
+		msg_sendlist_status = 'Y'
+	</entry>
+	<entry key="getBoardListCount">
+		SELECT
+		COUNT(*)
+		FROM
+		board
+		WHERE
+		user_no = ?
+		and
+		status = 'Y'
+	</entry>
+
+	<entry key="selectMessageReceiveList">
+		SELECT
+		nickname,
+		msg_no,
+		msg_title,
+		msg_content,
+		msg_date
+		FROM
+		(
+		SELECT
+		ROWNUM rnum,
+		msg_no,
+		nickname,
+		msg_sender,
+		msg_title,
+		msg_content,
+		msg_date
+		FROM
+		message,
+		member
+		WHERE
+		msg_receiver = ?
+		AND
+		member.user_no = message.msg_sender
+		AND
+		message.msg_status = 'Y'
+		ORDER BY
+		message.msg_date DESC
+		) msglist
+		WHERE
+		msglist.rnum BETWEEN ? AND ?
+	</entry>
+
+	<entry key="selectMessageSendList">
+		SELECT
+		nickname,
+		msg_no,
+		msg_title,
+		msg_content,
+		msg_date
+		FROM
+		(
+		SELECT
+		ROWNUM rnum,
+		msg_no,
+		nickname,
+		msg_sender,
+		msg_title,
+		msg_content,
+		msg_date
+		FROM
+		message,
+		member
+		WHERE
+		msg_sender = ?
+		AND
+		member.user_no = message.msg_receiver
+		AND message.msg_sendlist_status =
+		'Y'
+		ORDER BY
+		message.msg_date DESC
+		) msglist
+		WHERE
+		msglist.rnum BETWEEN ?
+		AND ?
+	</entry>
+
+	<entry key="selectBoardList">
+		SELECT
+		b_no,
+		b_id,
+		nickname,
+		b_title,
+		b_modify_date,
+		b_count
+		FROM
+		(
+		SELECT
+		ROWNUM rnum,
+		blist.*
+		FROM
+		(
+		SELECT
+		*
+		FROM
+		board b
+		JOIN
+		board_type USING ( b_id )
+		JOIN member USING ( user_no )
+		WHERE
+		user_no = ?
+		AND b.status = 'Y'
+		ORDER BY
+		b_no DESC
+		) blist
+		)
+		WHERE
+		rnum BETWEEN ? AND ?
+	</entry>
+	<entry key="getSearchedBoardListCount">
+		SELECT
+		COUNT(*)
+		FROM
+		board
+		WHERE
+		user_no = ?
+		AND status =
+		'Y'
+		AND b_title like '%' || ? || '%'
+	</entry>
+	<entry key="selectSearchedBoardList">
+		SELECT
+		b_no,
+		b_id,
+		nickname,
+		b_title,
+		b_modify_date,
+		b_count
+		FROM
+		(
+		SELECT
+		ROWNUM rnum,
+		blist.*
+		FROM
+		(
+		SELECT
+		*
+		FROM
+		board b
+		JOIN
+		board_type USING ( b_id )
+		JOIN member USING ( user_no )
+		WHERE
+		user_no = ?
+		AND b.status = 'Y'
+		AND b.b_title like '%' || ? ||'%'
+		ORDER BY
+		b_no DESC
+		)
+		blist
+		)
+		WHERE
+		rnum BETWEEN ? AND ?
+	</entry>
+	<entry key="selectRoomList">
+		select
+		r.r_no,
+		r_name,
+		img.route,
+		img.image_r_name
+		from
+		room_info r,
+		member m, image img, room_image rimg
+		where r.user_no = ?
+		and r.r_status
+		= 'Y'
+		and r.user_no = m.user_no
+		and rimg.r_no = r.r_no
+		and
+		rimg.image_no
+		= img.image_no
+		and img.image_level = 0
+		order by r.r_no desc
+	</entry>
+	<entry key="insertRoom">
+		insert into room_info values(
+		r_no_seq.nextval,
+		?,
+		?,
+		?,
+		?,
+		?,
+		?,
+		To_DATE(?, 'yyyy/mm/dd'),
+		To_DATE(?, 'yyyy/mm/dd'),
+		default,
+		?
+		)
+	</entry>
+	<entry key="insertRoomImage">
+		INSERT INTO image VALUES (
+		img_no_seq.NEXTVAL,
+		?,
+		?,
+		?,
+		?,
+		DEFAULT
+		)
+	</entry>
+	<entry key="matchRommImage">
+		INSERT INTO room_image VALUES (
+		img_no_seq.CURRVAL,
+		r_no_seq.CURRVAL
+		)
+	</entry>
+
+	<entry key="selectRoomWishList">
+		SELECT
+		r.r_no,
+		r_name,
+		m.nickname,
+		img.route,
+		img.image_r_name
+		FROM
+		room_info r,
+		member m,
+		image img,
+		room_image rimg,
+		room_wishlist wish
+		WHERE
+		wish.user_no = ?
+		AND wish.r_no = r.r_no
+		AND
+		r.r_status = 'Y'
+		AND r.user_no = m.user_no
+		AND rimg.r_no = r.r_no
+		AND
+		rimg.image_no = img.image_no
+		AND img.image_level = 0
+		ORDER BY
+		r.r_no DESC
+	</entry>
+	<entry key="selectStoreWishList">
+		SELECT
+		s.s_no,
+		s.s_name,
+		s_tel,
+		img.route,
+		img.image_r_name
+		FROM
+		store s,
+		image img,
+		store_image simg,
+		store_wishlist
+		wish
+		WHERE
+		wish.user_no = ?
+		AND s.s_no = wish.s_no
+		AND img.image_level = 0
+		and simg.s_no = s.s_no
+		AND img.image_no = simg.image_no
+		ORDER BY
+		s.s_no
+		DESC
+	</entry>
+	<entry key="selectBookList">
+		SELECT
+		booking_no,
+		r.r_no,
+		r_name,
+		nickname,
+		book_start,
+		book_end,
+		host_confirm,
+		r_pay,
+		r_address,
+		r_tel,
+		booking_status,
+		img.route,
+		img.image_r_name
+		FROM
+		room_info r,
+		member m,
+		image img,
+		room_image rimg,
+		room_booking rbook
+		WHERE
+		rbook.user_no = ?
+		AND rbook.r_no = r.r_no
+		AND
+		r.r_status = 'Y'
+		AND r.user_no = m.user_no
+		AND rimg.r_no = r.r_no
+		AND
+		rimg.image_no = img.image_no
+		AND img.image_level = 0
+		AND
+		(rbook.booking_status = 'Y' OR rbook.booking_status = ' ')
+		ORDER BY
+		r.r_no DESC
+	</entry>
+	<entry key="selectRequestList">
+		SELECT
+		request.*,
+		nickname
+		FROM
+		(
+		SELECT
+		booking_no,
+		r.r_no,
+		r_name,
+		book_start,
+		book_end,
+		r_pay,
+		r_address,
+		r_tel,
+		img.route,
+		img.image_r_name,
+		rbook.user_no
+		FROM
+		room_info r,
+		member m,
+		image img,
+		room_image rimg,
+		room_booking rbook
+		WHERE
+		r.user_no = ?
+		AND rbook.r_no =
+		r.r_no
+		AND r.r_status = 'Y'
+		AND r.user_no = m.user_no
+		AND rimg.r_no =
+		r.r_no
+		AND rimg.image_no = img.image_no
+		AND img.image_level = 0
+		AND
+		rbook.host_confirm = ' '
+		ORDER BY
+		r.r_no
+		) request,
+		member
+		where
+		request.user_no = member.user_no
+	</entry>
+	<entry key="confirmBooking">
+		UPDATE room_booking
+		SET
+		booking_status = 'Y'
+		WHERE
+		booking_no = ?
+	</entry>
+	<entry key="cancleBooking">
+		UPDATE room_booking
+		SET
+		booking_status = 'N'
+		WHERE
+		booking_no = ?
+	</entry>
+
+	<entry key="deleteMSG">
+		UPDATE message
+		SET
+		msg_status = 'N'
+		WHERE
+		msg_no = ?
+	</entry>
+	<entry key="deleteSendMSG">
+		UPDATE message
+		SET
+		msg_sendlist_status = 'N'
+		WHERE
+		msg_no
+		= ?
+	</entry>
+	<entry key="confirmRequest">
+		UPDATE room_booking
+		SET
+		host_confirm = 'Y'
+		WHERE
+		booking_no = ?
+	</entry>
+	<entry key="cancleRequest">
+		UPDATE room_booking
+		SET
+		host_confirm = 'N'
+		WHERE
+		booking_no = ?
+	</entry>
+</properties>

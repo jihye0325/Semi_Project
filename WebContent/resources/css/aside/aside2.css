@@ -1,0 +1,23 @@
+@charset "UTF-8";
+.aside2 {
+    position: fixed;
+    right: 20px;
+    border-radius: 30px;
+    margin-bottom: 1%;
+    z-index: 3;
+}
+.banner {
+    width : 110px;
+    height: 280px;
+}
+
+a:hover{
+    cursor: pointer;
+}
+
+.chat {
+    margin-top: 5px;
+    margin-left: 20px;
+    width: 100px;
+    height: 100px;
+}

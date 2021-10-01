@@ -1,0 +1,179 @@
+@charset "UTF-8";
+.outer {
+    width: 1000px;
+    margin : 50px auto;
+}
+
+.search_bar {
+    background: rgb(254,229,207);
+    border-radius: 20px;
+    width: 1000px;
+    height:50px;
+    display: flex;
+    align-items: center;
+    margin-bottom: 20px;
+}
+
+.location_list {
+    width: 600px;
+    margin-left: 30px;
+} 
+
+.location_ul {
+    display: flex;
+    justify-content: space-between;
+    list-style-type: none;
+}
+
+.onmouseover {
+    color: orange;
+    cursor: pointer;
+}
+
+.search {
+    margin-left: 150px;
+    width: 60px;
+    display: flex;
+}
+
+.search> input:nth-child(1) {
+    border: 2px solid rgb(255,191,132);
+}
+
+.searchimg {
+    margin-left: 10px;
+    width: 30px;
+    height: 30px;
+    cursor: pointer;
+}
+
+.array {
+    margin-left: 40px;
+    width: 50px;
+    height: 30px;
+}
+
+.storeview {
+    margin : 20px 0 0 0;
+    padding: 0;
+    width: 1008px;
+    display: flex;
+    flex-wrap: wrap;
+    
+}
+
+.store {
+    border: 0.1px solid lightgray;
+    margin: 0;
+    padding: 0;
+    width: 500px;
+    height: 250px;
+    display: flex;
+}
+
+.store_info button {
+    font-size: 1rem;
+    background: rgb(255, 242, 230);
+    border: 0;
+    border-radius: 20px;
+    width: 100px;
+    height: 30px;
+    margin-top: 15px;
+    margin-left: 140px;
+    cursor : pointer;
+}
+
+.insert button{
+    font-size: 1rem;
+    background: rgb(255, 191, 132);
+    border: 0;
+    border-radius: 5px;
+    width: 120px;
+    margin-left: 670px;
+    cursor : pointer;
+}
+
+.store_img {
+    width: 250px;
+    height: 250px;
+}
+
+.store_info {
+    display: flex;
+    flex-direction: column;
+}
+
+.wishlist_img {
+    width: 50px;
+    height: 50px;
+    margin-top: 10px;
+    margin-left: 190px;
+    cursor : pointer;
+}
+
+.content {
+    margin-left: 10px;
+}
+
+.store_title {
+    font-size: 20px;
+    font-weight : bold;
+    margin-bottom : 10px;
+}
+
+.score_review {
+	display : flex;
+}
+
+.score {
+	margin-right : 5px;
+}
+
+.simg {
+    width: 20px;
+    height: 20;
+    margin-right: 5px;
+}
+
+.map {
+    font-size: 11px;
+}
+
+ul, li {
+	margin: 0;
+	padding: 0;
+}
+
+.store_paging {
+	height: 50px;
+	line-height: 50px;
+	display: flex;
+	justify-content: center;
+	list-style: none;
+	width: 600px;
+	margin: auto;
+}
+
+.store_paging a {
+	text-decoration: none;
+	color: #282A35;
+	width: 40px;
+	display: block;
+	text-align: center;
+}
+
+.store_paging a.current_page {
+	border-bottom: 2px solid orange;
+	font-weight: bold;
+	color: orange;
+}
+
+a:link{
+    color: black;
+    text-decoration: none;
+}
+
+a:visited{
+    color: black;
+    text-decoration: none;
+}

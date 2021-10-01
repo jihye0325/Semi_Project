@@ -1,0 +1,702 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE properties SYSTEM
+"http://java.sun.com/dtd/properties.dtd">
+<properties>
+	<!-- 게시글 총 개수 -->
+	<entry key="getListCount">
+		SELECT
+       		COUNT(*)
+   		 FROM STORE
+  		WHERE S_STATUS = 'Y'
+	</entry>
+	<entry key="getSearchListCount">
+		SELECT
+	       COUNT(*)
+	    FROM STORE
+	  WHERE (S_NAME LIKE '%' || ? || '%'
+		    OR MENU LIKE '%' || ? || '%')
+	    AND S_STATUS = 'Y'
+	</entry>
+	<entry key="getAreaListCount">
+		SELECT
+	       COUNT(*)
+	    FROM STORE
+	  WHERE S_ADDRESS LIKE '%' || ? || '%'
+	    AND S_STATUS = 'Y'
+	</entry>
+	<!-- 지역안에서 검색하는 경우 개수 -->
+	<entry key="getArea_SearchListCount">
+		SELECT
+		       COUNT(*)
+		    FROM STORE
+		  WHERE S_ADDRESS LIKE '%' || ? || '%'
+	        AND (S_NAME LIKE '%' || ? || '%'
+		    OR MENU LIKE '%' || ? || '%')
+		    AND S_STATUS = 'Y'
+	</entry>
+	<!-- store List 조회 -->
+	<entry key="selectList">
+		SELECT
+		       S_NO
+		     , S_NAME
+		     , S_TEL
+		     , MENU
+		     , S_ADDRESS
+		     , S_COUNT
+		     , S_STATUS
+             , S_CREATE_DATE
+             , NVL(ROUND((SELECT S_SCORE
+                    FROM(SELECT
+                            C.S_NO,
+                            AVG(SCORE) S_SCORE
+                        FROM COMMENT1 C
+                        JOIN STORE S ON C.S_NO = S.S_NO
+                        WHERE C.S_NO = S.S_NO
+                        AND COMMENT_STATUS = 'Y'
+                        GROUP BY C.S_NO) SCORE_LIST 
+                        WHERE A.S_NO = SCORE_LIST.S_NO)
+                        ,1), 0) S_SCORE
+             , (SELECT
+                    COUNT(*) 
+                    FROM COMMENT1
+                        WHERE S_NO = A.S_NO
+                          AND COMMENT_STATUS = 'Y') REPLY_COUNT
+             , IMAGE_NO
+             , ROUTE
+             , IMAGE_NAME
+             , IMAGE_R_NAME
+		    FROM (SELECT
+		                ROWNUM RNUM
+		              , SLIST.*
+                    FROM (SELECT
+                                *
+                             FROM STORE 
+                             LEFT JOIN STORE_IMAGE USING(S_NO)
+                             LEFT JOIN IMAGE USING(IMAGE_NO)
+                             LEFT JOIN (SELECT
+                                        C.S_NO,
+                                        NVL(ROUND(AVG(SCORE),1),0) S_SCORE
+                                    FROM COMMENT1 C
+                                    JOIN STORE S ON S.S_NO = C.S_NO
+                                    WHERE C.S_NO = S.S_NO
+                                      AND COMMENT_STATUS = 'Y'
+                                    GROUP BY C.S_NO) USING(S_NO)
+                            WHERE S_STATUS = 'Y'
+                            ORDER BY S_SCORE DESC NULLS LAST, S_CREATE_DATE DESC) SLIST) A
+                                WHERE RNUM BETWEEN ? AND ?
+                                ORDER BY S_SCORE DESC, S_CREATE_DATE DESC, S_NAME
+	</entry>
+	<entry key="selectSearchList">
+		SELECT
+		       S_NO
+		     , S_NAME
+		     , S_TEL
+		     , MENU
+		     , S_ADDRESS
+		     , S_COUNT
+		     , S_STATUS
+             , S_CREATE_DATE
+             , NVL(ROUND((SELECT S_SCORE
+                    FROM(SELECT
+                            C.S_NO,
+                            AVG(SCORE) S_SCORE
+                        FROM COMMENT1 C
+                        JOIN STORE S ON C.S_NO = S.S_NO
+                        WHERE C.S_NO = S.S_NO
+                          AND COMMENT_STATUS = 'Y'
+                        GROUP BY C.S_NO) SCORE_LIST 
+                        WHERE A.S_NO = SCORE_LIST.S_NO)
+                        ,1), 0) S_SCORE
+             , (SELECT
+                    COUNT(*) 
+                    FROM COMMENT1
+                        WHERE S_NO = A.S_NO
+                          AND COMMENT_STATUS = 'Y') REPLY_COUNT
+             , IMAGE_NO
+             , ROUTE
+             , IMAGE_NAME
+             , IMAGE_R_NAME
+		    FROM (SELECT
+		                ROWNUM RNUM
+		              , SLIST.*
+                    FROM (SELECT
+                                *
+                             FROM STORE 
+                             LEFT JOIN STORE_IMAGE USING(S_NO)
+                             LEFT JOIN IMAGE USING(IMAGE_NO)
+                             LEFT JOIN (SELECT
+                                        C.S_NO,
+                                        NVL(ROUND(AVG(SCORE),1),0) S_SCORE
+                                    FROM COMMENT1 C
+                                    JOIN STORE S ON S.S_NO = C.S_NO
+                                    WHERE C.S_NO = S.S_NO
+                                    GROUP BY C.S_NO) USING(S_NO)
+                            WHERE S_STATUS = 'Y' 
+                              AND (S_NAME LIKE '%' || ? || '%'
+		                  			OR MENU LIKE '%' || ? || '%')
+                            ORDER BY S_SCORE DESC NULLS LAST, S_CREATE_DATE DESC) SLIST) A
+                                WHERE RNUM BETWEEN ? AND ?
+                                ORDER BY S_SCORE DESC, S_CREATE_DATE DESC, S_NAME
+	</entry>
+	<!-- 지역내 검색결과 별점순 -->
+	<entry key="selectArea_Search_scoreList">
+	SELECT
+		       S_NO
+		     , S_NAME
+		     , S_TEL
+		     , MENU
+		     , S_ADDRESS
+		     , S_COUNT
+		     , S_STATUS
+             , S_CREATE_DATE
+             , NVL(ROUND((SELECT S_SCORE
+                    FROM(SELECT
+                            C.S_NO,
+                            AVG(SCORE) S_SCORE
+                        FROM COMMENT1 C
+                        JOIN STORE S ON C.S_NO = S.S_NO
+                        WHERE C.S_NO = S.S_NO
+                          AND COMMENT_STATUS = 'Y'
+                        GROUP BY C.S_NO) SCORE_LIST 
+                        WHERE A.S_NO = SCORE_LIST.S_NO)
+                        ,1), 0) S_SCORE
+             , (SELECT
+                    COUNT(*) 
+                    FROM COMMENT1
+                        WHERE S_NO = A.S_NO
+                          AND COMMENT_STATUS = 'Y') REPLY_COUNT
+             , IMAGE_NO
+             , ROUTE
+             , IMAGE_NAME
+             , IMAGE_R_NAME
+		    FROM (SELECT
+		                ROWNUM RNUM
+		              , SLIST.*
+                    FROM (SELECT
+                                *
+                             FROM STORE 
+                             LEFT JOIN STORE_IMAGE USING(S_NO)
+                             LEFT JOIN IMAGE USING(IMAGE_NO)
+                             LEFT JOIN (SELECT
+                                        C.S_NO,
+                                        NVL(ROUND(AVG(SCORE),1),0) S_SCORE
+                                    FROM COMMENT1 C
+                                    JOIN STORE S ON S.S_NO = C.S_NO
+                                    WHERE C.S_NO = S.S_NO
+                                    GROUP BY C.S_NO) USING(S_NO)
+                            WHERE S_STATUS = 'Y' 
+                              AND (S_NAME LIKE '%' || ? || '%'
+		                  			OR MENU LIKE '%' || ? || '%')
+		                  	  AND S_ADDRESS LIKE '%' || ? || '%'
+                            ORDER BY S_SCORE DESC NULLS LAST, S_CREATE_DATE DESC) SLIST) A
+                                WHERE RNUM BETWEEN ? AND ?
+                                ORDER BY S_SCORE DESC, S_CREATE_DATE DESC, S_NAME
+	
+	</entry>
+	<!-- 지역내 검색결과 최신순 -->
+	<entry key="selectArea_Search_dateList">
+		SELECT
+		       S_NO
+		     , S_NAME
+		     , S_TEL
+		     , MENU
+		     , S_ADDRESS
+		     , S_COUNT
+		     , S_STATUS
+             , S_CREATE_DATE
+             , NVL(ROUND((SELECT S_SCORE
+                    FROM(SELECT
+                            C.S_NO,
+                            AVG(SCORE) S_SCORE
+                        FROM COMMENT1 C
+                        JOIN STORE S ON C.S_NO = S.S_NO
+                        WHERE C.S_NO = S.S_NO
+                          AND COMMENT_STATUS = 'Y'
+                        GROUP BY C.S_NO) SCORE_LIST 
+                        WHERE A.S_NO = SCORE_LIST.S_NO)
+                        ,1), 0) S_SCORE
+             , (SELECT
+                    COUNT(*) 
+                    FROM COMMENT1
+                        WHERE S_NO = A.S_NO
+                          AND COMMENT_STATUS = 'Y') REPLY_COUNT
+             , IMAGE_NO
+             , ROUTE
+             , IMAGE_NAME
+             , IMAGE_R_NAME
+		    FROM (SELECT
+		                ROWNUM RNUM
+		              , SLIST.*
+                    FROM (SELECT
+                                *
+                             FROM STORE 
+                             LEFT JOIN STORE_IMAGE USING(S_NO)
+                             LEFT JOIN IMAGE USING(IMAGE_NO)
+                             LEFT JOIN (SELECT
+                                        C.S_NO,
+                                        NVL(ROUND(AVG(SCORE),1),0) S_SCORE
+                                    FROM COMMENT1 C
+                                    JOIN STORE S ON S.S_NO = C.S_NO
+                                    WHERE C.S_NO = S.S_NO
+                                    GROUP BY C.S_NO) USING(S_NO)
+                            WHERE S_STATUS = 'Y' 
+                              AND (S_NAME LIKE '%' || ? || '%'
+		                  			OR MENU LIKE '%' || ? || '%')
+		                  	  AND S_ADDRESS LIKE '%' || ? || '%'
+                            ORDER BY S_SCORE DESC NULLS LAST, S_CREATE_DATE DESC) SLIST) A
+                                WHERE RNUM BETWEEN ? AND ?
+                                ORDER BY S_CREATE_DATE DESC, S_NAME
+	
+	</entry>
+	<!-- 검색결과 최신순정렬 -->
+	<entry key="selectSearch_dateList">
+		SELECT
+		       S_NO
+		     , S_NAME
+		     , S_TEL
+		     , MENU
+		     , S_ADDRESS
+		     , S_COUNT
+		     , S_STATUS
+             , S_CREATE_DATE
+             , NVL(ROUND((SELECT S_SCORE
+                    FROM(SELECT
+                            C.S_NO,
+                            AVG(SCORE) S_SCORE
+                        FROM COMMENT1 C
+                        JOIN STORE S ON C.S_NO = S.S_NO
+                        WHERE C.S_NO = S.S_NO
+                          AND COMMENT_STATUS = 'Y'
+                        GROUP BY C.S_NO) SCORE_LIST 
+                        WHERE A.S_NO = SCORE_LIST.S_NO)
+                        ,1), 0) S_SCORE
+             , (SELECT
+                    COUNT(*) 
+                    FROM COMMENT1
+                        WHERE S_NO = A.S_NO
+                          AND COMMENT_STATUS = 'Y') REPLY_COUNT
+             , IMAGE_NO
+             , ROUTE
+             , IMAGE_NAME
+             , IMAGE_R_NAME
+		    FROM (SELECT
+		                ROWNUM RNUM
+		              , SLIST.*
+                    FROM (SELECT
+                                *
+                             FROM STORE 
+                             LEFT JOIN STORE_IMAGE USING(S_NO)
+                             LEFT JOIN IMAGE USING(IMAGE_NO)
+                             LEFT JOIN (SELECT
+                                        C.S_NO,
+                                        NVL(ROUND(AVG(SCORE),1),0) S_SCORE
+                                    FROM COMMENT1 C
+                                    JOIN STORE S ON S.S_NO = C.S_NO
+                                    WHERE C.S_NO = S.S_NO
+                                    GROUP BY C.S_NO) USING(S_NO)
+                            WHERE S_STATUS = 'Y' 
+                              AND (S_NAME LIKE '%' || ? || '%'
+		                  			OR MENU LIKE '%' || ? || '%')
+                            ORDER BY S_SCORE DESC NULLS LAST, S_CREATE_DATE DESC) SLIST) A
+                                WHERE RNUM BETWEEN ? AND ?
+                                ORDER BY S_CREATE_DATE DESC, S_NAME
+	</entry>
+	<!-- 지역검색 -->
+	<entry key="selectAreaList">
+		SELECT
+		       S_NO
+		     , S_NAME
+		     , S_TEL
+		     , MENU
+		     , S_ADDRESS
+		     , S_COUNT
+		     , S_STATUS
+             , S_CREATE_DATE
+             , NVL(ROUND((SELECT S_SCORE
+                    FROM(SELECT
+                            C.S_NO,
+                            AVG(SCORE) S_SCORE
+                        FROM COMMENT1 C
+                        JOIN STORE S ON C.S_NO = S.S_NO
+                        WHERE C.S_NO = S.S_NO
+                          AND COMMENT_STATUS = 'Y'
+                        GROUP BY C.S_NO) SCORE_LIST 
+                        WHERE A.S_NO = SCORE_LIST.S_NO)
+                        ,1), 0) S_SCORE
+             , (SELECT
+                    COUNT(*) 
+                    FROM COMMENT1
+                        WHERE S_NO = A.S_NO
+                          AND COMMENT_STATUS = 'Y') REPLY_COUNT
+             , IMAGE_NO
+             , ROUTE
+             , IMAGE_NAME
+             , IMAGE_R_NAME
+		    FROM (SELECT
+		                ROWNUM RNUM
+		              , SLIST.*
+                    FROM (SELECT
+                                *
+                             FROM STORE 
+                             LEFT JOIN STORE_IMAGE USING(S_NO)
+                             LEFT JOIN IMAGE USING(IMAGE_NO)
+                             LEFT JOIN (SELECT
+                                        C.S_NO,
+                                        NVL(ROUND(AVG(SCORE),1),0) S_SCORE
+                                    FROM COMMENT1 C
+                                    JOIN STORE S ON S.S_NO = C.S_NO
+                                    WHERE C.S_NO = S.S_NO
+                                    GROUP BY C.S_NO) USING(S_NO)
+                            WHERE S_STATUS = 'Y'
+                              AND S_ADDRESS LIKE '%' || ? || '%'
+                            ORDER BY S_SCORE DESC NULLS LAST, S_CREATE_DATE DESC) SLIST) A
+                            WHERE RNUM BETWEEN ? AND ? 
+                                ORDER BY S_SCORE DESC, S_CREATE_DATE DESC
+	</entry>
+	<!-- 지역내 최신순정렬 -->
+	<entry key="selectArea_dateList">
+			SELECT
+				       S_NO
+				     , S_NAME
+				     , S_TEL
+				     , MENU
+				     , S_ADDRESS
+				     , S_COUNT
+				     , S_STATUS
+		             , S_CREATE_DATE
+		             , NVL(ROUND((SELECT S_SCORE
+		                    FROM(SELECT
+		                            C.S_NO,
+		                            AVG(SCORE) S_SCORE
+		                        FROM COMMENT1 C
+		                        JOIN STORE S ON C.S_NO = S.S_NO
+		                        WHERE C.S_NO = S.S_NO
+		                          AND COMMENT_STATUS = 'Y'
+		                        GROUP BY C.S_NO) SCORE_LIST 
+		                        WHERE A.S_NO = SCORE_LIST.S_NO)
+		                        ,1), 0) S_SCORE
+		             , (SELECT
+		                    COUNT(*) 
+		                    FROM COMMENT1
+		                        WHERE S_NO = A.S_NO
+		                          AND COMMENT_STATUS = 'Y') REPLY_COUNT
+		             , IMAGE_NO
+		             , ROUTE
+		             , IMAGE_NAME
+		             , IMAGE_R_NAME
+				    FROM (SELECT
+				                ROWNUM RNUM
+				              , SLIST.*
+		                    FROM (SELECT
+		                                *
+		                             FROM STORE 
+		                             LEFT JOIN STORE_IMAGE USING(S_NO)
+		                             LEFT JOIN IMAGE USING(IMAGE_NO)
+		                             LEFT JOIN (SELECT
+		                                        C.S_NO,
+		                                        NVL(ROUND(AVG(SCORE),1),0) S_SCORE
+		                                    FROM COMMENT1 C
+		                                    JOIN STORE S ON S.S_NO = C.S_NO
+		                                    WHERE C.S_NO = S.S_NO
+		                                    GROUP BY C.S_NO) USING(S_NO)
+		                            WHERE S_STATUS = 'Y'
+		                              AND S_ADDRESS LIKE '%' || ? || '%'
+		                            ORDER BY S_SCORE DESC NULLS LAST, S_CREATE_DATE DESC) SLIST) A
+		                            WHERE RNUM BETWEEN ? AND ? 
+		                                ORDER BY S_CREATE_DATE DESC, S_NAME ASC
+	</entry>
+	<!-- 최신순 정렬 -->
+	<entry key="selectDateArrayList">
+		SELECT
+		       S_NO
+		     , S_NAME
+		     , S_TEL
+		     , MENU
+		     , S_ADDRESS
+		     , S_COUNT
+		     , S_STATUS
+             , S_CREATE_DATE
+             , NVL(ROUND((SELECT S_SCORE
+                    FROM(SELECT
+                            C.S_NO,
+                            AVG(SCORE) S_SCORE
+                        FROM COMMENT1 C
+                        JOIN STORE S ON C.S_NO = S.S_NO
+                        WHERE C.S_NO = S.S_NO
+                          AND COMMENT_STATUS = 'Y'
+                        GROUP BY C.S_NO) SCORE_LIST 
+                        WHERE A.S_NO = SCORE_LIST.S_NO)
+                        ,1), 0) S_SCORE
+             , (SELECT
+                    COUNT(*) 
+                    FROM COMMENT1
+                        WHERE S_NO = A.S_NO
+                          AND COMMENT_STATUS = 'Y') REPLY_COUNT
+             , IMAGE_NO
+             , ROUTE
+             , IMAGE_NAME
+             , IMAGE_R_NAME
+		    FROM (SELECT
+		                ROWNUM RNUM
+		              , SLIST.*
+		        FROM (SELECT
+		                    *
+		                 FROM STORE 
+		                 LEFT JOIN STORE_IMAGE USING(S_NO)
+		                 LEFT JOIN IMAGE USING(IMAGE_NO)
+		                WHERE S_STATUS = 'Y'  
+		                ORDER BY S_CREATE_DATE DESC, S_NAME) SLIST) A
+		               WHERE RNUM BETWEEN ? AND ? 
+	</entry>
+	<entry key="increaseCount">
+		UPDATE STORE
+		   SET S_COUNT = S_COUNT + 1
+		 WHERE S_NO = ?
+	</entry>
+	<entry key="selectStore">
+		SELECT 
+		       S_NO
+		     , S_NAME
+		     , S_TEL
+		     , S_TIME
+		     , MENU
+		     , S_ADDRESS
+		     , S_COUNT
+		     , S_STATUS
+		     , S_CREATE_DATE
+             , NVL(ROUND((SELECT S_SCORE
+                    FROM(SELECT
+                            S_NO,
+                            AVG(SCORE) S_SCORE
+                        FROM COMMENT1
+                        WHERE COMMENT_STATUS = 'Y'
+                        GROUP BY S_NO)
+                        WHERE S_NO = ?),1), 0) S_SCORE
+		     , (SELECT
+                    COUNT(*) 
+                    FROM COMMENT1
+                        WHERE S_NO = ?
+                          AND COMMENT_STATUS = 'Y') REPLY_COUNT
+		     , IMAGE_NO
+		     , ROUTE
+		     , IMAGE_NAME
+		     , IMAGE_R_NAME
+		    FROM STORE
+		    LEFT JOIN STORE_IMAGE USING(S_NO)
+		    LEFT JOIN IMAGE USING(IMAGE_NO)
+		 WHERE S_STATUS = 'Y'
+		   AND S_NO = ?
+	</entry>
+	<entry key="selectReplyList">
+		SELECT
+	        COMMENT1_NO
+          , USER_NO
+          , S_NO
+          , NICKNAME
+          , GENDER
+	      , COMMENT_INFO
+	      , COMMENT_CREATE_DATE
+          , SCORE
+          , COMMENT_STATUS
+          , ROUND((SELECT AVG(SCORE) FROM COMMENT1 WHERE S_NO = ? AND COMMENT_STATUS = 'Y' GROUP BY S_NO),1) AVG_SCORE
+	    FROM COMMENT1
+	    JOIN MEMBER USING(USER_NO)
+	 WHERE S_NO = ?
+	   AND COMMENT_STATUS = 'Y'
+	   ORDER BY COMMENT1_NO DESC
+	</entry>
+	<entry key="insertReply">
+		INSERT
+		INTO COMMENT1
+		(
+			COMMENT1_NO
+          , S_NO
+		  , USER_NO
+          , COMMENT_INFO
+		  , COMMENT_CREATE_DATE
+		  , COMMENT_MODIFY_DATE
+		  , SCORE
+		  , COMMENT_STATUS
+		)
+		VALUES
+		(
+			COMMENT1_NO_SEQ.NEXTVAL
+		  , ?
+		  , ?
+		  , ?
+		  , DEFAULT
+		  , DEFAULT
+		  , ?
+          , DEFAULT
+		)
+	</entry>
+	<!-- 로그인 유저의 위시리스트 조회 -->
+	<entry key="selectStoreWishList">
+		SELECT
+		        S_NO
+		      , USER_NO
+		      , S_STATUS
+		    FROM STORE_WISHLIST
+		    JOIN STORE USING (S_NO)
+		    WHERE USER_NO = ?
+	</entry>
+	<!-- 위시리스트 삽입 -->
+	<entry key="insertWish">
+		INSERT
+			INTO STORE_WISHLIST
+			(
+				S_NO
+			  , USER_NO
+			)
+			VALUES
+			(
+				?
+			   ,?
+			)
+	</entry>
+	<!-- 위시리스트 삭제 -->
+	<entry key="deleteWish">
+		DELETE
+		FROM STORE_WISHLIST
+		WHERE S_NO = ?
+		  AND USER_NO = ?
+	</entry>
+	<!-- 식당 정보 삭제 -->
+	<entry key="deleteStore">
+		UPDATE STORE
+		   SET S_STATUS = 'N'
+		WHERE S_NO = ?
+	</entry>
+	<!-- Image에서 삭제 -->
+	<entry key="deleteImage">
+		UPDATE IMAGE
+		   SET I_STATUS = 'N'
+		 WHERE IMAGE_NO = (SELECT 
+                                IMAGE_NO
+                            FROM STORE_IMAGE 
+                            WHERE S_NO = ?)
+	</entry>
+	<!-- Store 삽입 -->
+	<entry key="insertStore">
+		INSERT 
+	    INTO STORE
+	    (
+		        S_NO
+		      , S_NAME
+		      , S_TEL
+		      , S_TIME
+		      , MENU
+		      , S_ADDRESS
+		      , S_COUNT
+		      , S_STATUS
+		      , S_CREATE_DATE 
+	    )
+	    VALUES
+	    (
+		        S_NO_SEQ.NEXTVAL
+		      , ?
+		      , ?
+		      , ?
+		      , ?
+		      , ?
+		      , DEFAULT
+		      , DEFAULT
+		      , DEFAULT
+	    )
+	</entry>
+	<!-- Image 삽입 -->
+	<entry key="insertImage">
+	    INSERT
+	    INTO IMAGE
+	    VALUES
+	    (
+	        IMG_NO_SEQ.NEXTVAL
+	      , ?
+	      , ?
+	      , ?
+	      , 0
+	      , DEFAULT
+	    )
+	</entry>
+	<!-- Store_Image 삽입 -->
+	<entry key="insertStore_Image">
+		INSERT
+		INTO STORE_IMAGE
+		(
+			S_NO
+		  , IMAGE_NO
+		)
+		VALUES
+		(
+			S_NO_SEQ.CURRVAL
+		  , IMG_NO_SEQ.CURRVAL
+		)
+	</entry>
+	<!-- Store 수정 -->
+	<entry key="updateStore">
+		UPDATE STORE
+		   SET S_NAME = ?
+		     , S_TEL = ?
+		     , S_ADDRESS = ?
+		     , S_TIME = ?
+		     , MENU = ?
+		     , S_CREATE_DATE = SYSDATE
+		 WHERE S_NO = ?
+	</entry>
+	<!-- Image 수정 -->
+	<entry key="updateImage">
+		UPDATE IMAGE
+		   SET IMAGE_NAME = ?
+		     , IMAGE_R_NAME = ?
+		 WHERE IMAGE_R_NAME = ?
+	</entry>
+	<!-- 댓글 삭제 -->
+	<entry key="deleteReply">
+		UPDATE COMMENT1
+		   SET COMMENT_STATUS = 'N'
+		 WHERE COMMENT1_NO = ?
+	</entry>
+	<!-- 댓글 수정 -->
+	<entry key="updateReply">
+		UPDATE COMMENT1
+		   SET COMMENT_INFO = ?
+		     , COMMENT_CREATE_DATE = SYSDATE
+		     , SCORE = ?
+		     WHERE COMMENT1_NO = ?
+	</entry>
+	<!-- Image 테이블 삽입 -->
+	<entry key="insertAddedImage">
+		INSERT 
+			INTO IMAGE
+			(
+				IMAGE_NO
+			  , ROUTE
+			  , IMAGE_NAME
+			  , IMAGE_R_NAME
+			  , IMAGE_LEVEL
+			  , I_STATUS
+			)
+			VALUES
+			(
+				IMG_NO_SEQ.NEXTVAL
+			  , ?
+			  , ?
+			  , ?
+			  , 0
+			  , 'Y'
+			)
+	</entry>
+	<entry key="insertAddedStoreImage">
+		INSERT
+			INTO STORE_IMAGE
+			(
+				S_NO
+			  , IMAGE_NO
+			)
+			VALUES
+			(
+				?
+			  , IMG_NO_SEQ.CURRVAL 
+			)
+	</entry>
+</properties>

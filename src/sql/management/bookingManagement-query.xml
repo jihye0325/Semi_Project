@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE properties SYSTEM
+"http://java.sun.com/dtd/properties.dtd">
+<properties>
+	<entry key="roomListCount">
+	SELECT
+		COUNT(*)
+	FROM ROOM_INFO
+	WHERE R_STATUS = 'Y'
+	</entry>
+	<entry key="roomNameSearchCount">
+	SELECT
+		COUNT(*)
+	FROM ROOM_INFO
+	WHERE R_STATUS = 'Y'
+	AND R_NAME LIKE '%' || ? || '%'
+	</entry>
+	
+	
+		
+	<entry key="roomNameSearch">
+	SELECT
+		*
+	FROM(SELECT ROWNUM RNUM, MLIST.*
+		FROM(SELECT 
+			*
+		FROM MEMBER
+		WHERE R_STATUS = 'Y'
+		AND R_NAME LIKE '%' || ? || '%'
+		ORDER BY USER_NO ASC) MLIST)
+	WHERE RNUM BETWEEN ? AND ?
+	</entry>
+	
+	
+	
+	<entry key = "selectRoomList">
+	SELECT
+		*
+	FROM(SELECT ROWNUM RNUM, MLIST.*
+		FROM(SELECT 
+			*
+		FROM ROOM_INFO
+		WHERE R_STATUS = 'Y'
+		ORDER BY USER_NO ASC) MLIST)
+	WHERE RNUM BETWEEN ? AND ?
+	</entry>
+	<entry key="selectSalseInfo">
+	 select
+      host_name,
+        r1.R_NO,
+        R_NAME,
+        R_TEL,
+        R_PAY,
+        r_address,
+        money,
+     	r2.r_no
+        from room_info r1,room_booking r2, payment p,host h
+        where r2.r_no = r1.r_no
+        AND booking_no = bk_no
+        AND r1.user_no = H.USER_NO
+        AND booking_status = 'Y'
+        AND r1.r_no = ?
+	
+	</entry>
+	
+	
+</properties>

@@ -1,0 +1,189 @@
+@charset "UTF-8";
+.outer {
+	width: 1000px;
+	margin: auto;
+	margin-bottom: 50px;
+}
+
+ul, li {
+	margin: 0;
+	padding: 0;
+}
+
+.qna_title {
+	margin-top: 40px;
+	text-align: center;
+}
+
+.qna_list {
+	margin: 30px 30px;
+    height: 300px;
+    min-height: 450px;
+}
+ 
+.qna_list>ul {
+	border-bottom: 1px solid #f3f5f7;
+	border-radius: 10px;
+    height: 40px;
+	line-height: 40px;
+	display: flex;
+	justify-content: space-around;
+	list-style: none;
+}
+
+.qna_list>ul.last {
+	border: 0;
+}
+
+.qna_list>ul>li {
+	text-align: center;
+}
+
+.qna_header {
+	background: rgb(254,229,207);
+	color: black;
+	font-weight: bold;
+    border-radius: 20px;
+}
+
+.qna_list .id {
+	width: 60px;
+}
+
+.qna_list .category {
+	width: 80px;
+}
+
+.qna_list .title {
+	width: 330px;
+	overflow: hidden;
+	text-overflow: ellipsis;
+	white-space: nowrap;
+}
+
+.qna_list .writer {
+	width: 80px;
+}
+
+.qna_list .count {
+	width: 50px;
+}
+
+.qna_list .date {
+	width: 100px;
+}
+
+.qna_list .open {
+	width: 50px;
+}
+
+.onmouseover {
+	background: rgb(255, 236, 222);
+	cursor: pointer;
+}
+
+.qna_paging {
+	height: 50px;
+	line-height: 50px;
+	display: flex;
+	justify-content: center;
+	list-style: none;
+	width: 600px;
+	margin: auto;
+}
+
+.qna_paging a {
+	text-decoration: none;
+	color: #282A35;
+	width: 40px;
+	display: block;
+	text-align: center;
+}
+
+.qna_paging a.current_page {
+	border-bottom: 2px solid orange;
+	font-weight: bold;
+	color: orange;
+}
+
+.search_area {
+	text-align: center;
+	padding: 10px;
+}
+
+.search_area select {
+	width: 100px;
+	height: 40px;
+	border: 0px;
+    border-radius: 10px;
+    margin-right: 10px;
+}
+
+.input_area {
+    border: 1px solid rgb(255,191,132);
+    border-radius: 10px;
+	padding: 3px 3px 14px 10px;
+	margin-right: 20px;
+	background: white;
+    text-align: center;
+}
+
+.input_area input {
+	width: 220px;
+	height: 15px;
+	border: 0px;
+}
+
+.input_area input:focus, .search_area select:focus {
+	outline: none;
+}
+
+.search_area button {
+    width: 70px;
+	height: 33px;
+    border-radius: 10px;
+	border: 0px;
+	color: black;
+	background: rgb(255,191,132);
+	margin: 5px;
+}
+
+.button_area {
+	margin-top: 10px;
+	text-align: center;
+	padding: 10px;
+}
+
+.button_area button {
+    width: 85px;
+	height: 33px;
+    border-radius: 10px;
+	border: 0px;
+	color: black;
+	background: rgb(255,191,132);
+	margin: 5px;
+}
+
+.myqna {
+    width: 150px;
+	height: 30px;
+    border-radius: 10px;
+	border: 0px;
+	color: black;
+	background: rgb(255,191,132);
+	margin: 5px;
+}
+ 
+button {
+	cursor: pointer;
+}
+
+a:link{
+    color: black;
+    text-decoration: none;
+}
+
+a:visited{
+    color: black;
+    text-decoration: none;
+}
