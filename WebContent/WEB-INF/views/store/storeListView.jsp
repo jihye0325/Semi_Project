@@ -12,7 +12,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link href="<%=request.getContextPath()%>/resources/css/store/storeList.css" rel="stylesheet"></link>
     <title>식당</title>
-</head>
+</head> 
 <body>  
 	<%@ include file="/WEB-INF/views/common/header.jsp"%>
  	<%@ include file="/WEB-INF/views/common/banner.jsp"%>
