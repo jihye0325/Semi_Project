@@ -116,8 +116,7 @@
             <!-- 지도 -->
             <div class="map_area">
 	            <div class="map" id="map">
-	            <!-- 오픈키 지움 -->
-				<script type="text/javascript" src="//dapi.kakao.com/v2/maps/sdk.js?appkey=오픈키&libraries=services"></script>
+	            <script type="text/javascript" src="//dapi.kakao.com/v2/maps/sdk.js?appkey=9982aa164b62485fc0b086df16f0b7df&libraries=services"></script>
 				<script>
 				if('${store.s_address}'){
 					console.log('${store.s_address}');

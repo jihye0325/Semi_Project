@@ -53,7 +53,7 @@
     <!-- 오픈키지움 -->
     <script>
     	$(function(){
-    		var apiURI = "http://api.openweathermap.org/data/2.5/weather?q="+ "jeju"+ "&units=metric"+ "&lang=kr" + "&appid="+"오픈키";
+    		var apiURI = "http://api.openweathermap.org/data/2.5/weather?q="+ "jeju"+ "&units=metric"+ "&lang=kr" + "&appid="+"366c7f6f33d24a9a02e7fe4f0e5dd808";
     		$.ajax({
     			url : apiURI,
     			dataType : "json",
@@ -107,7 +107,7 @@
    		var date = year + "." + month + "." + day;
    		console.log(dayString);
    	// ** 오픈키 지움**
-   	var apiURI ="http://openapi.data.go.kr/openapi/service/rest/Covid19/getCovid19SidoInfStateJson?serviceKey=오픈키&pageNo=1&numOfRows=10&startCreateDt=" + dayString + "&endCreateDt=" + dayString;
+   	var apiURI ="http://openapi.data.go.kr/openapi/service/rest/Covid19/getCovid19SidoInfStateJson?serviceKey=19zIv0PcvB4V%2Bh9O4ybMH4sZavKxBn8pw5ZiqXXY68DCsElnOCIP9MQVi4Knuv4FRT56PlqsJn9iwYP25G30nw%3D%3D&pageNo=1&numOfRows=10&startCreateDt=" + dayString + "&endCreateDt=" + dayString;
 		console.log(apiURI);
    		$.ajax({
    			url : apiURI,
