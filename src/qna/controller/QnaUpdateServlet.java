@@ -96,14 +96,15 @@ public class QnaUpdateServlet extends HttpServlet {
 				File deleteFile = new File(savePath + q_image.getQ_deleteName());
 				deleteFile.delete();
 			}
+			request.getSession().setAttribute("msg", "게시글이 수정되었습니다");
 			response.sendRedirect(request.getContextPath() + "/qna/detail?q_no=" + q_no);
 		
 		} else {
 			// 실패하면 수정하면서 저장한 사진 삭제
 			File failedFile = new File(savePath + q_image.getImage_r_name());
 			failedFile.delete();
-			// request.setAttribute("msg", "게시글 수정에 실패했습니다.");
-			// request.getRequestDispatcher("/WEB-INF/views/common/errorpage.jsp").forward(request, response);
+			request.setAttribute("msg", "게시글 수정에 실패했습니다.");
+			request.getRequestDispatcher("/WEB-INF/views/common/errorpage.jsp").forward(request, response);
 			System.out.println("게시글 수정에 실패했습니다.");
 		}
 	}

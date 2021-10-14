@@ -117,6 +117,16 @@ ul.profile-menu>li:hover ul.submenu {
 
 <link rel="icon" type="image/x-icon"
 	href="<%=request.getContextPath()%>/resources/images/favicon.png">
+	
+<%-- 세션에 담긴 msg 있을 경우 alert 처리하는 scrit 작성 --%>
+<% if(session.getAttribute("msg") != null) { %>
+<script>
+	alert('<%= session.getAttribute("msg") %>');
+</script>
+<% 
+	session.removeAttribute("msg");
+	} 
+%>
 </head>
 <header id="header">
 	<c:set value="${ pageContext.servletContext.contextPath }"

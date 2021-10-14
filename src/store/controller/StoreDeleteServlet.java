@@ -50,11 +50,11 @@ public class StoreDeleteServlet extends HttpServlet {
 			failedFile.delete();
 			
 			System.out.println("식당 정보가 삭제되었습니다.");
-			// request.setAttribute("msg", "식당 정보가 삭제되었습니다.");
+			request.getSession().setAttribute("msg", "식당 정보가 삭제되었습니다");
 			response.sendRedirect(request.getContextPath() + "/store/list");
 		} else {
-			// request.setAttribute("msg", "식당 정보 삭제에 실패하였습니다.");
-			// request.getRequestDispatcher("/WEB-INF/views/common/errorpage.jsp").forward(request, response);
+			request.setAttribute("msg", "식당 정보 삭제에 실패하였습니다.");
+			request.getRequestDispatcher("/WEB-INF/views/common/errorpage.jsp").forward(request, response);
 			System.out.println("식당 정보 삭제에 실패하였습니다.");
 		}
 	}

@@ -50,11 +50,11 @@ public class QnaDeleteServlet extends HttpServlet {
 			File failedFile = new File(root + "\\resources\\images\\qna\\" + image_r_name);
 			failedFile.delete();
 			
-			// request.setAttribute("msg", "게시글이 삭제되었습니다.");
+			request.getSession().setAttribute("msg", "게시글이 삭제되었습니다");
 			response.sendRedirect(request.getContextPath() + "/qna/list");
 		} else {
-			// request.setAttribute("msg", "게시글 삭제에 실패하였습니다.");
-			// request.getRequestDispatcher("/WEB-INF/views/common/errorpage.jsp").forward(request, response);
+			request.setAttribute("msg", "게시글 삭제에 실패하였습니다.");
+			request.getRequestDispatcher("/WEB-INF/views/common/errorpage.jsp").forward(request, response);
 			System.out.println("게시글삭제실패");
 		}
 		

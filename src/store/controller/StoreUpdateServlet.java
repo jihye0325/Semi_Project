@@ -96,13 +96,14 @@ public class StoreUpdateServlet extends HttpServlet {
 				File deleteFile = new File(savePath + s_image.getS_deleteName());
 				deleteFile.delete();
 			}
+			request.getSession().setAttribute("msg", "식당정보가 수정되었습니다");
 			response.sendRedirect(request.getContextPath() + "/store/detail?s_no=" + s_no);
 		} else {
 			// 실패하면 수정하면서 저장한 사진 삭제
 			File failedFile =new File(savePath + s_image.getImage_r_name());
 			failedFile.delete();
-			// request.setAttribute("msg", "식당정보 수정에 실패했습니다.");
-			// request.getRequestDispatcher("/WEB-INF/views/common/errorpage.jsp").forward(request, response);
+			request.setAttribute("msg", "식당정보 수정에 실패했습니다.");
+			request.getRequestDispatcher("/WEB-INF/views/common/errorpage.jsp").forward(request, response);
 			System.out.println("식당정보 수정에 실패했습니다.");
 		}
 	}

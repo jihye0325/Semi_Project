@@ -47,8 +47,8 @@ public class QnaInsertServlet extends HttpServlet {
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		if(!ServletFileUpload.isMultipartContent(request)) {
 			System.out.println("전송실패");
-			//request.setAttribute("msg", "잘못 된 전송입니다.");
-			//request.getRequestDispatcher("/WEB-INF/views/common/errorpage.jsp").forward(request, response);
+			request.setAttribute("msg", "잘못 된 전송입니다.");
+			request.getRequestDispatcher("/WEB-INF/views/common/errorpage.jsp").forward(request, response);
 			return;
 		}
 		
@@ -102,14 +102,15 @@ public class QnaInsertServlet extends HttpServlet {
 		
 		if(result > 0) {
 			// 작성후 목록으로 재요청
+			request.getSession().setAttribute("msg", "게시글이 등록되었습니다");
 			response.sendRedirect(request.getContextPath() + "/qna/list");
 		} else {
 			// 로직 수행 실패 시 저장되었던 파일 삭제
 			File failedFile = new File(savePath + q_image.getImage_r_name());
 			failedFile.delete();
 		
-			//request.setAttribute("msg", "1:1 문의게시판  게시글 등록에 실패하였습니다.");
-			//request.getRequestDispatcher("/WEB-INF/views/common/errorpage.jsp").forward(request, response);
+			request.setAttribute("msg", "1:1 문의게시판  게시글 등록에 실패하였습니다.");
+			request.getRequestDispatcher("/WEB-INF/views/common/errorpage.jsp").forward(request, response);
 			System.out.println("1:1 문의게시판  게시글 등록에 실패하였습니다.");
 		} 
 	}

@@ -46,8 +46,8 @@ public class StoreInsertServlet extends HttpServlet {
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		if(!ServletFileUpload.isMultipartContent(request)) {
 			System.out.println("전송실패");
-			//request.setAttribute("msg", "잘못 된 전송입니다.");
-			//request.getRequestDispatcher("/WEB-INF/views/common/errorpage.jsp").forward(request, response);
+			request.setAttribute("msg", "잘못 된 전송입니다.");
+			request.getRequestDispatcher("/WEB-INF/views/common/errorpage.jsp").forward(request, response);
 			return;
 		}
 		
@@ -95,6 +95,7 @@ public class StoreInsertServlet extends HttpServlet {
 		
 		if(result > 0) {
 			// 작성후 목록 (작성한 글 확인할 수 있게 최신순으로 정렬한 식당리스트 페이지로)
+			request.getSession().setAttribute("msg", "신규 식당정보가 등록되었습니다");
 			response.sendRedirect(request.getContextPath() + "/store/list?array=date");
 			// ** 작성한 글로  -> 방금 등록한 식당정보의 s_no를 알아오는 방법?? **
 			// response.sendRedirect(request.getContextPath() + "/store/detail?s_no=" + s.getS_no());
@@ -104,8 +105,8 @@ public class StoreInsertServlet extends HttpServlet {
 			File failedFile = new File(savePath + s_image.getImage_r_name());
 			failedFile.delete();
 			
-			//request.setAttribute("msg", "식당정보 등록에 실패하였습니다.");
-			//request.getRequestDispatcher("/WEB-INF/views/common/errorpage.jsp").forward(request, response);
+			request.setAttribute("msg", "식당정보 등록에 실패하였습니다.");
+			request.getRequestDispatcher("/WEB-INF/views/common/errorpage.jsp").forward(request, response);
 			System.out.println("식당정보 등록에 실패하였습니다.");
 		}
 	}
