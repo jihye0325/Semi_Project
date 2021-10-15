@@ -79,7 +79,7 @@
    
    
    <div class ="logo">
-            <a href="메인페이지.html">   
+            <a href="<%=request.getContextPath()%>">   
                 <img class ="second_logo" src="${ contextPath }/resources/images/logo (2).png" alt="jejudo" >
             </a>
             <img class ="first_logo" src="${ contextPath }/resources/images/common/banner.png" width="100%" alt="jejudo" >
@@ -101,7 +101,7 @@
 	<form>
 		<nav id = "nav">
 			<ul>
-				<li class="area" onclick="selectArea('제주')"><a>제주도</a></li>
+				<li class="area" onclick="selectArea('제주')"><a>제주시</a></li>
                 <li class="area" onclick="selectArea('서귀포')"><a>서귀포</a></li>
                 <li class="area" onclick="selectArea('함덕')"><a>함덕</a></li>
                 <li class="area" onclick="selectArea('성산')"><a>성산/우도  </a></li>

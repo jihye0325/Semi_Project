@@ -41,7 +41,9 @@
 			<img src="${ contextPath }/resources/images/common/banner.png">		
 		</div>
 		<div id="second">
+			<a href="<%=request.getContextPath()%>">
 			<img src="${ contextPath }/resources/images/common/jejulogo.png" id="logo">		
+			</a>
 		</div>
 	</div>
 </body>
