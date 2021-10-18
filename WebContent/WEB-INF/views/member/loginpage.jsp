@@ -7,6 +7,7 @@
 <title>로그인</title>
 <script src="https://developers.kakao.com/sdk/js/kakao.min.js"></script>
 <style>
+
 .loginArea {
 	margin: 150px;
 	text-align: center;
@@ -14,7 +15,7 @@
 
 .loginBtn {
 	display: flex;
-	margin-left: 35%;
+	justify-content: center;
 }
 
 .loginBtn input {
