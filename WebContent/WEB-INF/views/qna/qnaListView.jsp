@@ -28,6 +28,7 @@
 					<ul class="qna_header">
 						<li class="id">글번호</li>
 						<li class="category">분류</li>
+						<li class="answer"></li>
 						<li class="title">제목</li>
 						<li class="writer">작성자</li>
 						<li class="count">조회수</li>
@@ -38,6 +39,12 @@
 					<ul class="qna_ul" onclick="detailView(${b.q_no}, '${b.id }', '${ b.open_status }')">
 						<li class="id">${ b.q_no }</li>
 						<li class="category">${ b.q_cname }</li>
+						<li class="answer">
+						<c:choose>
+						<c:when test="${ b.reply_count > 0 }">답변완료</c:when>
+						<c:otherwise>&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp</c:otherwise>
+						</c:choose>
+						</li>
 						<li class="title">${ b.q_title } 
 						<c:if test="${ b.reply_count != 0 }">
 						(${ b.reply_count })
