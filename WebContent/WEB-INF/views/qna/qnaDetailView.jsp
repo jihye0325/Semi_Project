@@ -276,7 +276,7 @@
 	
 		// 댓글 수정화면
 		$(document).on('click',"#rupdateView", function(e){
-			//console.log(e.target.id);
+			console.log(e.target.id);
 			if(updateComment.textContent != null){
 				updateComment.textContent = originComment;
 				updateOuter.replaceWith(updateResult);
@@ -284,7 +284,7 @@
 					originBtn.style.visibility = 'visible';
 				}
 			}
-			//console.log(e.currentTarget.parentElement.parentElement.parentElement.firstElementChild.lastElementChild.innerHTML);
+			console.log(e.currentTarget.parentElement.parentElement.parentElement.firstElementChild.lastElementChild.innerHTML);
 			updateComment.value = e.currentTarget.parentElement.parentElement.parentElement.firstElementChild.lastElementChild.innerHTML;
 			console.log(e.currentTarget.parentElement.parentElement.parentElement.firstElementChild.lastElementChild);
 			updateResult = e.currentTarget.parentElement.parentElement.parentElement.firstElementChild.lastElementChild;
@@ -297,8 +297,8 @@
 	
 		// 수정완료 버튼 클릭
 		updateBtn.addEventListener('click', function(e){
-			var c_no = $('#c_no').val();
-			// console.log($('#c_no').val());
+			var c_no = e.currentTarget.parentElement.parentElement.parentElement.lastElementChild.firstElementChild.value
+			console.log(e.currentTarget.parentElement.parentElement.parentElement.lastElementChild.firstElementChild.value);
 			// console.log($('#q_no').val());
 			
 			$.ajax({
