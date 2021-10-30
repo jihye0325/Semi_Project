@@ -73,6 +73,7 @@ public class LoginCheckFilter implements Filter {
 	public void init(FilterConfig fConfig) throws ServletException {
 		permitList = new ArrayList<>();
 		permitList.add("/UnI_JeJu/");
+		permitList.add("/UnI_JeJu/index.jsp");
 		permitList.add("/UnI_JeJu/home");
 		permitList.add("/UnI_JeJu/login");
 		permitList.add("/UnI_JeJu/idCheck");
