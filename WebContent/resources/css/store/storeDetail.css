@@ -32,13 +32,9 @@
 }
 
 .search {
-    margin-left: 180px;
+    margin-left: 170px;
     width: 60px;
     display: flex;
-}
-
-.search>input {
-    border: 2px solid rgb(255,191,132);
 }
 
 .searchimg {
